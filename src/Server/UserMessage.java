@@ -5,9 +5,11 @@ import javax.swing.Icon;
 import Interfaces.iMessage;
 
 public class UserMessage implements iMessage {
+	private String Username;
 	private String TextMessage;
 	private Icon Image;
 	private boolean IsPublic;
+	private String ToUser;
 	
 	@Override
 	public String getMessage() {

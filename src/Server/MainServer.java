@@ -6,8 +6,11 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.LinkedList;
 
+import Interfaces.iMessage;
+
 public class MainServer {
 	private ServerSocket connSocket;
+	private int outPort = 3550;
 	private ClientListener listener = new ClientListener();
 	private LinkedList<User> userList = new LinkedList<User>();
 	
@@ -24,7 +27,19 @@ public class MainServer {
 	
 	private class MessageHandler extends Thread
 	{
+		private UserMessage userMessage;
+
+		public MessageHandler(iMessage message) {
+			userMessage = (UserMessage) message;
+		}
 		
+		@Override
+		public void run() {
+			while(!isInterrupted())
+			{
+				
+			}
+		}
 	}
 	
 	private class ClientListener extends Thread
@@ -41,16 +56,39 @@ public class MainServer {
 					
 					ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
 					
-					String username =  inStream.readUTF();
+					Object obj =  inStream.readObject();
 					
-					User newUser = new User(username, new ObjectOutputStream(socket.getOutputStream()));
-					
-					userList.add(newUser);
+					if(obj instanceof String)
+					{
+						ObjectOutputStream stream = new ObjectOutputStream(socket.getOutputStream());
+						
+						User newUser = new User((String)obj,socket.getInetAddress(), stream);
+										
+						userList.add(newUser);
+						updateClientLists();
+					}
+					else if(obj instanceof iMessage)
+					{
+						//TODO Start MessageHandler.
+					}
 				} 
 				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+			}
+		}
+
+		private void updateClientLists() throws IOException {			
+			for(User u : userList)
+			{
+				ObjectOutputStream stream = u.OutStream;
+				
+				stream.writeObject(userList);
+				stream.flush();
 			}
 		}
 	}
