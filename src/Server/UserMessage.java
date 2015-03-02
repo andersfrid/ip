@@ -15,28 +15,46 @@ public class UserMessage implements iMessage {
 	public String getMessage() {
 		return TextMessage;
 	}
+
 	@Override
-	public void setMessage() {
+	public String getUsername() {
+		return Username;
+	}
+
+	@Override
+	public void setUsername() {
 		
 	}
+
+	@Override
+	public void setMessage(String message) {
+
+	}
+
 	@Override
 	public Icon getImage() {
-		// TODO Auto-generated method stub
-		return null;
+		return Image;
 	}
+
 	@Override
-	public void setImage() {
+	public void setImage(Icon image) {
+		
+	}
+
+	@Override
+	public boolean IsPublic() {
+		return IsPublic;
+	}
+
+	@Override
+	public String ToUser() {
+		return ToUser;
+	}
+
+	@Override
+	public void setTo(String username) {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public boolean IsPublic() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public String ToUser() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

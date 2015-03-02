@@ -37,7 +37,54 @@ public class MainServer {
 		public void run() {
 			while(!isInterrupted())
 			{
+				if(userMessage.IsPublic())
+				{
+					try {
+						sendToAll();
+					} 
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				else if(!userMessage.ToUser().isEmpty())
+				{
+					User u = findUser(userList,userMessage.getUsername());
+					
+					try {
+						sendToSpecific(u,userMessage);
+					} 
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				
+				interrupt();
+			}
+		}
+
+		private void sendToSpecific(User u, UserMessage message) throws IOException {
+			u.OutStream.writeObject(message);
+			u.OutStream.flush();
+		}
+
+		private User findUser(LinkedList<User> userList, String username) {
+			for(User u : userList)
+			{
+				if(u.Username == username)
+				{
+					return u;
+				}
+			}
+
+			return null;
+		}
+
+		private void sendToAll() throws IOException {
+			for(User u : userList)
+			{
+				u.OutStream.writeObject(userMessage);
+				u.OutStream.flush();
 			}
 		}
 	}
@@ -69,7 +116,8 @@ public class MainServer {
 					}
 					else if(obj instanceof iMessage)
 					{
-						//TODO Start MessageHandler.
+						MessageHandler handler = new MessageHandler((iMessage)obj);
+						handler.start();
 					}
 				} 
 				catch (IOException e) {
@@ -85,10 +133,8 @@ public class MainServer {
 		private void updateClientLists() throws IOException {			
 			for(User u : userList)
 			{
-				ObjectOutputStream stream = u.OutStream;
-				
-				stream.writeObject(userList);
-				stream.flush();
+				u.OutStream.writeObject(userList);
+				u.OutStream.flush();
 			}
 		}
 	}
