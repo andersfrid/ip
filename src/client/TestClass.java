@@ -1,5 +1,7 @@
 package client;
 
 public class TestClass {
-	//Andreas är bäst!
+	public static void main(String[] args) {
+		System.out.println("HEJ");
+	}
 }

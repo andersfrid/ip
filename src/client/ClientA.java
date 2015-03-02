@@ -1,5 +1,7 @@
 package client;
 
+import interfaces.Client;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -8,8 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-import Interfaces.Client;
 
 public class ClientA implements Client {
 	private ClientController controller;

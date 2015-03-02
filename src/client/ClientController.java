@@ -1,11 +1,11 @@
 package client;
 
+import interfaces.Client;
+
 import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import Interfaces.Client;
 
 public class ClientController {
 	private Client client;
