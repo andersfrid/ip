@@ -8,4 +8,7 @@ public interface iMessage {
 	
 	public Icon getImage();
 	public void setImage();
+	
+	public boolean IsPublic();
+	public String ToUser();
 }
