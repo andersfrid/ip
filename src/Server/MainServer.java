@@ -28,6 +28,7 @@ public class MainServer {
 	private class MessageHandler extends Thread
 	{
 		private UserMessage userMessage;
+		private Logger logger = new Logger();
 
 		public MessageHandler(iMessage message) {
 			userMessage = (UserMessage) message;
@@ -40,11 +41,12 @@ public class MainServer {
 				if(userMessage.IsPublic())
 				{
 					try {
-						sendToAll();
+						sendToAll();	
+						logger.saveAllMessage(userMessage);
 					} 
 					catch (IOException e) {
 						e.printStackTrace();
-					}
+					}		
 				}
 				else if(!userMessage.ToUser().isEmpty())
 				{
@@ -52,11 +54,13 @@ public class MainServer {
 					
 					try {
 						sendToSpecific(u,userMessage);
+						
+						logger.saveToMessage(u.Username,userMessage);
 					} 
 					catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}					
 				}
 				
 				interrupt();
@@ -64,8 +68,12 @@ public class MainServer {
 		}
 
 		private void sendToSpecific(User u, UserMessage message) throws IOException {
-			u.OutStream.writeObject(message);
-			u.OutStream.flush();
+			synchronized (u.OutStream) {
+				u.OutStream.writeObject(message);
+				u.OutStream.flush();
+			}
+					
+			logger.logMessage(userMessage.getUsername(),u.Username,userMessage.getMessage());
 		}
 
 		private User findUser(LinkedList<User> userList, String username) {
@@ -83,8 +91,12 @@ public class MainServer {
 		private void sendToAll() throws IOException {
 			for(User u : userList)
 			{
-				u.OutStream.writeObject(userMessage);
-				u.OutStream.flush();
+				synchronized (u.OutStream) {
+					u.OutStream.writeObject(userMessage);
+					u.OutStream.flush();
+				}
+				
+				logger.logMessage(userMessage.getUsername(),null,userMessage.getMessage());
 			}
 		}
 	}
@@ -112,7 +124,7 @@ public class MainServer {
 						User newUser = new User((String)obj,socket.getInetAddress(), stream);
 										
 						userList.add(newUser);
-						updateClientLists();
+						updateClientLists();	
 					}
 					else if(obj instanceof iMessage)
 					{
@@ -133,8 +145,10 @@ public class MainServer {
 		private void updateClientLists() throws IOException {			
 			for(User u : userList)
 			{
-				u.OutStream.writeObject(userList);
-				u.OutStream.flush();
+				synchronized (u.OutStream) {
+					u.OutStream.writeObject(userList);
+					u.OutStream.flush();
+				}
 			}
 		}
 	}
