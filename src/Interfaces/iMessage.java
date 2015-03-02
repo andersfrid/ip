@@ -3,6 +3,10 @@ package Interfaces;
 import javax.swing.Icon;
 
 public interface iMessage {
+	
+	public String getUsername();
+	public void setUsername();
+	
 	public String getMessage();
 	public void setMessage(String message);
 	
