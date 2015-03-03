@@ -11,13 +11,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientA implements Client {
+public class ClientUser_bak implements Client{
 	private ClientController controller;
 	private Socket socket;
 	private ObjectInputStream dis;
 	private ObjectOutputStream dos;
 	
-	public ClientA(String ip, int port) throws IOException {
+	public ClientUser_bak(String ip, int port) throws IOException {
 		socket = new Socket(ip,port);
 		dis = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 		dos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));

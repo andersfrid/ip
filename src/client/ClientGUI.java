@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 
 public class ClientGUI extends JPanel implements ActionListener {
 	
-
-	
 	private JLabel lblClientname = new JLabel("Clientserver - IP");
 	private JLabel lblUsername = new JLabel("Username:");
 //	private JLabel lblPort = new JLabel("Port:");
@@ -24,12 +22,15 @@ public class ClientGUI extends JPanel implements ActionListener {
 	
 	private JTextField tfUsername = new JTextField("");
 	
-	
 	private Font plainSS18 = new Font("SansSerif", Font.PLAIN, 18);
 	private Font boldSS28 = new Font("SansSerif", Font.BOLD, 28);
 	
-	public ClientGUI() {
-        setLayout(null);
+	private ClientController controller;
+	
+	public ClientGUI(ClientController controller) {
+		this.controller = controller;
+		
+		setLayout(null);
         setPreferredSize( new Dimension(600, 300) );
              
         lblClientname.setBounds(200, 40, 250, 25);
@@ -64,31 +65,18 @@ public class ClientGUI extends JPanel implements ActionListener {
 	
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == btnConnect) {
-    		boolean isConnected = false;
+    		controller.login(tfUsername.getText());
     		
-    		if (isConnected == true) {
-			System.out.println("User: " + tfUsername.getText() + " has successfully connected!");
-    		}
-    		else {
-    			System.out.println("Connection failed.");
-    		}
-    	}  
-    	
+    	}
+//    		boolean isConnected = false;
+//    		if (isConnected == true) {
+//			System.out.println("User: " + tfUsername.getText() + " has successfully connected!");
+//    		}
+//    		else {
+//    			System.out.println("Connection failed.");
+//    		} 
     	else if (e.getSource() == btnClose) {
     		System.exit(0);
     	}
     }
-	
-
-
-
-	public static void main(String[] args) {
-		ClientGUI gui = new ClientGUI();
-		JFrame frame1 = new JFrame( "ClientGUI" );
-		frame1.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame1.add( gui );
-		frame1.pack();
-		frame1.setVisible( true );
-	}
-
 }

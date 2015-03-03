@@ -1,93 +1,21 @@
 package client;
 
-import interfaces.Client;
-
-import java.io.IOException;
-
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 public class ClientController {
-	private Client client;
-	private ClientUI ui = new ClientUI(this);
-
-	private void showClientUI() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				JFrame frame = new JFrame("Client");
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.add(ui);
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
+	private ClientUser client;
+	private GUIMess gui;
+	
+	public ClientController(){
+		
+	}
+	
+	//Användaren loggar in
+	public void login(String username){
+		System.out.println("I controller med användarnamn: "+username);
+		
+		
+		ClientUser client = new ClientUser(this);
+		GUIMess gui = new GUIMess("IP (inloggad som "+username+")", this);
 	}
 
-	public void FileChooser(){
-		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"JPG & GIF Images", "jpg", "gif");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showOpenDialog(parent);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("You chose to open this file: " +
-					chooser.getSelectedFile().getName());
-		}
-	}	
-	public ClientController(Client client) {
-		this.client = client;
-		client.setClientController(this);
-		showClientUI();
-	}
-
-	public void put(String name) {
-		try {
-			client.put(name);
-		} catch(IOException e) {
-			newResponse(e.toString());
-		}
-	}
-
-	public void get(String name) {
-		try {
-			client.get(name);
-		} catch (IOException e) {
-			newResponse(e.toString());
-		}
-	}
-
-	public void list() {
-		try {
-			client.list();
-		} catch (IOException e) {
-			newResponse(e.toString());
-		}
-	}
-
-	public void remove(String name) {
-		try {
-			client.remove(name);
-		} catch (IOException e) {
-			newResponse(e.toString());
-		}
-	}
-
-	public void exit() {
-		try {
-			client.exit();
-		} catch (IOException e) {
-			newResponse(e.toString());
-		}		
-	}
-
-	public void newResponse(final String response) {
-		SwingUtilities.invokeLater(new Runnable() { 
-			public void run() {
-				ui.setResponse(response);
-			}
-		});
-	}
-
+	
 }

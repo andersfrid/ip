@@ -16,6 +16,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GUIMess extends JPanel implements ActionListener {
+	private String head;
+	private ClientController controller;
+	
 	private JLabel online, konv;
 	private JTextField JTFmessage = new JTextField();
 	private JButton JBSend = new JButton("Send");
@@ -29,7 +32,12 @@ public class GUIMess extends JPanel implements ActionListener {
 	private JPanel JPCenter, JPEast, JPWest, JPSouth;
 	private JFrame frame;
 
-	public GUIMess() {
+
+	public GUIMess(String username, ClientController controller) {
+		this.head = username;
+		
+		
+		
 		// WEST
 		JPWest = new JPanel(new GridLayout(6, 1));
 		JPWest.setPreferredSize(new Dimension(140, 280));
@@ -114,7 +122,7 @@ public class GUIMess extends JPanel implements ActionListener {
 		fifth.addActionListener( this );
 
 		// Frame
-		frame = new JFrame("FreeStyla");
+		frame = new JFrame(username);
 		frame.setPreferredSize(new Dimension(700, 400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -156,10 +164,4 @@ public class GUIMess extends JPanel implements ActionListener {
 			}
 						
 		}
-
-	public static void main(String[] args) {
-		GUIMess lol = new GUIMess();
-
-	}
-
 }
