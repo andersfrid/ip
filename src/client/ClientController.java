@@ -12,7 +12,6 @@ public class ClientController {
 	public void login(String username){
 		System.out.println("I controller med användarnamn: "+username);
 		
-		
 		ClientUser client = new ClientUser(this);
 		GUIMess gui = new GUIMess("IP (inloggad som "+username+")", this);
 	}

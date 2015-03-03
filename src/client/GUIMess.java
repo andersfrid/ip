@@ -36,8 +36,6 @@ public class GUIMess extends JPanel implements ActionListener {
 	public GUIMess(String username, ClientController controller) {
 		this.head = username;
 		
-		
-		
 		// WEST
 		JPWest = new JPanel(new GridLayout(6, 1));
 		JPWest.setPreferredSize(new Dimension(140, 280));
