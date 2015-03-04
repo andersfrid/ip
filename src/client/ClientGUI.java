@@ -65,7 +65,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 	
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == btnConnect) {
-    		controller.login(tfUsername.getText());
+    	
     		
     	}
 //    		boolean isConnected = false;

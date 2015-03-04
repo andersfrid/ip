@@ -2,10 +2,10 @@ package interfaces;
 
 import java.io.IOException;
 
-import client.ClientController_bak;
+import client.ClientController;
 
 public interface Client {
-	public void setClientController(ClientController_bak controller);
+	public void setClientController(ClientController clientController);
 	public void put(String name) throws IOException;
 	public void get(String name) throws IOException;
 	public void list() throws IOException;

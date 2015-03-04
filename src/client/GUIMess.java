@@ -16,7 +16,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GUIMess extends JPanel implements ActionListener {
-	private String head;
 	private ClientController controller;
 	
 	private JLabel online, konv;
@@ -33,11 +32,8 @@ public class GUIMess extends JPanel implements ActionListener {
 	private JFrame frame;
 
 
-	public GUIMess(String username, ClientController controller) {
-		this.head = username;
-		
-		
-		
+	public GUIMess(ClientController controller) {
+		this.controller = controller;
 		// WEST
 		JPWest = new JPanel(new GridLayout(6, 1));
 		JPWest.setPreferredSize(new Dimension(140, 280));
@@ -122,7 +118,7 @@ public class GUIMess extends JPanel implements ActionListener {
 		fifth.addActionListener( this );
 
 		// Frame
-		frame = new JFrame(username);
+		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(700, 400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -133,10 +129,16 @@ public class GUIMess extends JPanel implements ActionListener {
 		frame.add(JPSouth, BorderLayout.SOUTH);
 
 	}
+	// visar text från client
+	public void showMessage(String mess){
+		showMess.append(mess + "\n");
+	}
+
+
 
 	public void actionPerformed(ActionEvent e) {
 			if ( e.getSource() == JBSend){
-				
+				controller.put(JTFmessage.getText());
 			}
 			if (e.getSource() == JBSendAll){
 				
