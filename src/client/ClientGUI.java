@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ClientGUI extends JPanel implements ActionListener {
+	
+	private JFrame frame = new JFrame("Client");
 	
 	private JLabel lblClientname = new JLabel("Clientserver - IP");
 	private JLabel lblUsername = new JLabel("Username:");
@@ -57,16 +60,19 @@ public class ClientGUI extends JPanel implements ActionListener {
         tfUsername.setFont(plainSS18);
         add(tfUsername);
         
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(this);
+        frame.pack();
+        frame.setVisible(true);
+        
         btnConnect.addActionListener(this);
         btnClose.addActionListener(this);
-        
         
 	}
 	
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == btnConnect) {
-    	
-    		
+    		controller.setUser(tfUsername.getText());
     	}
 //    		boolean isConnected = false;
 //    		if (isConnected == true) {
@@ -79,4 +85,6 @@ public class ClientGUI extends JPanel implements ActionListener {
     		System.exit(0);
     	}
     }
+    
+  
 }

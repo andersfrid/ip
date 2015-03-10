@@ -18,7 +18,6 @@ public class ClientUser implements Client {
 	public ClientUser(String ip, int port){
 		this.ip = ip;
 		this.port = port;
-		
 	}
 
 	public void setClientController(ClientController controller) {
