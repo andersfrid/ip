@@ -44,7 +44,7 @@ public class ServerController {
 	
 	public static void main(String[] args) {
 		ServerController controller = new ServerController();
-		AgeServerA serverA = new AgeServerA(controller,3440);
+		AgeServerA serverA = new AgeServerA(controller,3550);
 	}
 }
 
