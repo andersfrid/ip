@@ -1,5 +1,7 @@
 package Server;
 
+import java.util.LinkedList;
+
 import javax.swing.Icon;
 
 import Interfaces.iMessage;
@@ -9,7 +11,7 @@ public class UserMessage implements iMessage {
 	private String TextMessage;
 	private Icon Image;
 	private boolean IsPublic;
-	private String ToUser;
+	private LinkedList<String> ToUser;
 	
 	@Override
 	public String getMessage() {
@@ -20,10 +22,10 @@ public class UserMessage implements iMessage {
 	public String getUsername() {
 		return Username;
 	}
-
+	
 	@Override
-	public void setUsername() {
-		
+	public void setUsername(String username) {
+		Username = username;
 	}
 
 	@Override
@@ -42,19 +44,14 @@ public class UserMessage implements iMessage {
 	}
 
 	@Override
-	public boolean IsPublic() {
-		return IsPublic;
-	}
-
-	@Override
-	public String ToUser() {
-		return ToUser;
-	}
-
-	@Override
 	public void setTo(String username) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public LinkedList<String> ToUser() {
+		return ToUser;
 	}
 
 }
