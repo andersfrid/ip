@@ -38,7 +38,7 @@ public class MainServer {
 		public void run() {
 			while(!isInterrupted())
 			{
-				if(userMessage.IsPublic())
+				if(userMessage.ToUser().isEmpty())
 				{
 					try {
 						sendToAll();	
@@ -50,17 +50,25 @@ public class MainServer {
 				}
 				else if(!userMessage.ToUser().isEmpty())
 				{
-					User u = findUser(userList,userMessage.getUsername());
+					LinkedList<String> listOfUsers = userMessage.ToUser();
 					
-					try {
-						sendToSpecific(u,userMessage);
+					for(String user : listOfUsers)
+					{
+						User u = findUser(user);
 						
-						logger.saveToMessage(u.Username,userMessage);
-					} 
-					catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
+						if(u != null)
+						{
+							try {
+								sendToSpecific(u,userMessage);
+								
+								logger.saveToMessage(u.Username,userMessage);
+							} 
+							catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
 				}
 				
 				interrupt();
@@ -76,7 +84,7 @@ public class MainServer {
 			logger.logMessage(userMessage.getUsername(),u.Username,userMessage.getMessage());
 		}
 
-		private User findUser(LinkedList<User> userList, String username) {
+		private User findUser(String username) {
 			for(User u : userList)
 			{
 				if(u.Username == username)
@@ -85,6 +93,17 @@ public class MainServer {
 				}
 			}
 
+			Logger logger = new Logger();
+			
+			try 
+			{
+				logger.logError(username);
+			} 
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return null;
 		}
 
