@@ -8,55 +8,47 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javafx.scene.control.ScrollPane;
+
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 
 public class GUIMess extends JPanel implements ActionListener {
 	private ClientController controller;
 	
-	private JLabel online, konv;
+	private JLabel online;
 	private JTextField JTFmessage = new JTextField();
 	private JButton JBSend = new JButton("Send");
 	private JButton JBLogout = new JButton("Logout");
 	private JButton JBAddFile = new JButton("Add File");
 	private JButton JBSendAll = new JButton("Send all");
-	private JButton first, second, third, fourth, fifth, dav, and, ande, joa, joh;
+	private JToggleButton dav, and, ande, joa, joh;
 	private JTextArea showMess = new JTextArea();
 	private Font font1 = new Font("SansSerif", Font.BOLD, 13);
 	private Font font2 = new Font("SansSerif", Font.PLAIN, 12);
-	private JPanel JPCenter, JPEast, JPWest, JPSouth;
+	private JPanel JPCenter, JPEast, JPSouth;
 	private JFrame frame;
+	private JScrollPane scrollPane;
 
 
 	public GUIMess(ClientController controller) {
 		this.controller = controller;
-		// WEST
-		JPWest = new JPanel(new GridLayout(6, 1));
-		JPWest.setPreferredSize(new Dimension(140, 280));
-		JPWest.setBackground(Color.WHITE);
-		konv = new JLabel("Messages");
-		konv.setFont(font1);
-		JPWest.add(konv);
-		first = new JButton("");
-		second = new JButton("");
-		third = new JButton("");
-		fourth = new JButton("");
-		fifth = new JButton("");
-		JPWest.add(first);
-		JPWest.add(second);
-		JPWest.add(third);
-		JPWest.add(fourth);
-		JPWest.add(fifth);
-
+	
 		// CENTER
+		scrollPane = new JScrollPane(showMess);
 		JPCenter = new JPanel();
 		JPCenter.setPreferredSize(new Dimension(400, 280));
-		JPCenter.add(showMess);
-		showMess.setPreferredSize(new Dimension(400, 280));
+		JPCenter.add(scrollPane);
+		scrollPane.setPreferredSize(new Dimension(500, 280));
+		showMess.setEditable(false);
+		
 
 
 		// EAST
@@ -64,11 +56,11 @@ public class GUIMess extends JPanel implements ActionListener {
 		JPEast.setPreferredSize(new Dimension(140, 280));
 		JPEast.setBackground(Color.WHITE);
 		online = new JLabel("Online/Offline");
-		dav = new JButton("David");
-		and = new JButton("Andreas");
-		ande = new JButton("Anders");
-		joa = new JButton("Joakim");
-		joh = new JButton("Johan");
+		dav = new JToggleButton("David");
+		and = new JToggleButton("Andreas");
+		ande = new JToggleButton("Anders");
+		joa = new JToggleButton("Joakim");
+		joh = new JToggleButton("Johan");
 		dav.setForeground(Color.RED);
 		and.setForeground(Color.RED);
 		ande.setForeground(Color.RED);
@@ -111,27 +103,20 @@ public class GUIMess extends JPanel implements ActionListener {
 		JBSendAll.addActionListener( this );
 		JBLogout.addActionListener( this );
 		JBAddFile.addActionListener( this );
-		first.addActionListener( this );
-		second.addActionListener( this );
-		third.addActionListener( this );
-		fourth.addActionListener( this );
-		fifth.addActionListener( this );
-
+		
 		// Frame
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(700, 400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.pack();
-		frame.add(JPWest, BorderLayout.WEST);
 		frame.add(JPCenter, BorderLayout.CENTER);
 		frame.add(JPEast, BorderLayout.EAST);
 		frame.add(JPSouth, BorderLayout.SOUTH);
-
+		frame.pack();
 	}
 	// visar text från client
 	public void showMessage(String mess){
-		showMess.append(mess + "\n");
+		showMess.insert(mess + "\n",0);
 	}
 
 
@@ -149,23 +134,24 @@ public class GUIMess extends JPanel implements ActionListener {
 			if (e.getSource() == JBAddFile){
 				
 			}
-			if (e.getSource() == first){
+			if (e.getSource() == dav){
 				
 			}
-			if (e.getSource() == second){
+			if (e.getSource() == and){
 				
 			}
-			if (e.getSource() == third){
-	
+			if (e.getSource() == ande){
+				
 			}
-			if (e.getSource() == fourth){
-	
+			if (e.getSource() == joa){
+				
 			}
-			if (e.getSource() == fifth){
-	
+			if (e.getSource() == joh){
+				
 			}
+		
 						
 		}
 }
 
-//david
+

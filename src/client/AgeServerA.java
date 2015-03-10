@@ -57,7 +57,7 @@ public class AgeServerA {
 		}
 				
 		private String badRequest(String request) throws IOException {
-			String response = "Felaktig request: " + request;
+			String response = "David: " + request;
 //			dis.skip(dis.available());
 			return response;
 		}
