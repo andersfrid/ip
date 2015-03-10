@@ -5,9 +5,14 @@ import java.util.*;
 
 public class Logger{
 	
-	private void log(String logMessage) throws FileNotFoundException
+	private void log(String logMessage) throws IOException
 	{
-		PrintWriter out = new PrintWriter("log.txt");
+		File yourFile = new File("log.txt");
+		if(!yourFile.exists()) {
+		    yourFile.createNewFile();
+		}
+		
+		PrintWriter out = new PrintWriter(yourFile);
 		
 		synchronized (out) {
 			out.println(logMessage);
@@ -16,12 +21,12 @@ public class Logger{
 		}		
 	}
 	
-	public void logUser(String username) throws FileNotFoundException
+	public void logUser(String username) throws IOException
 	{
 		log(new Date()+username+" logged in");
 	}
 	
-	public void logMessage(String username, String toUser, String message) throws FileNotFoundException
+	public void logMessage(String username, String toUser, String message) throws IOException
 	{
 		if(toUser.isEmpty())
 		{
@@ -45,8 +50,7 @@ public class Logger{
 	  }  
 	}
 
-	private void saveToUser(UserMessage userMessage, File child)
-			throws FileNotFoundException {
+	private void saveToUser(UserMessage userMessage, File child) throws FileNotFoundException {		
 		PrintWriter out = new PrintWriter(child);
 		
 		synchronized (out) {
