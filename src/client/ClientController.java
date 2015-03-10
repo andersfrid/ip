@@ -71,7 +71,7 @@ public class ClientController {
 	}
 	
 	public static void main(String[]args) throws IOException{
-		Client clientUser = new ClientUser("127.0.0.1",3440);
+		Client clientUser = new ClientUser("127.0.0.1",3550);
 		new ClientController(clientUser);
 	}
 	

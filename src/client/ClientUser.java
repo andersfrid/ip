@@ -1,10 +1,6 @@
 package client;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 import interfaces.Client;
@@ -14,8 +10,8 @@ public class ClientUser implements Client {
 	private String ip;
 	private int port;
 	private Socket socket;
-	private DataInputStream dis;
-	private DataOutputStream dos;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	
 
 	//Hämtar vilket ip och vilken port vi ska connecta på.
@@ -33,8 +29,8 @@ public class ClientUser implements Client {
 	public void connect() throws IOException{
 		socket = new Socket(ip,port);
 		socket.setSoTimeout(5000);//om ingen kontakt till server hittas timeout.
-		dis = new DataInputStream(new BufferedInputStream(socket.getInputStream())); // en ström så vi kan lägga saker på server?
-		dos = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream())); // en ström så vi kan hämta saker!
+		ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream())); // en ström så vi kan lägga saker på server?
+		oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream())); // en ström så vi kan hämta saker!
 	}
 	
 	// stänger ner anslutning till servern.
@@ -45,9 +41,9 @@ public class ClientUser implements Client {
 	//Skriver ner värde på servern
 		public void put(String text) throws IOException {
 		connect();
-		dos.writeUTF(text); //vad vi vill skicka till servern
-		dos.flush(); //skickar iväg det
-		String mess = dis.readUTF(); //skickar det vi skrev till textrutan
+		oos.writeUTF(text); //vad vi vill skicka till servern
+		oos.flush(); //skickar iväg det
+		String mess = ois.readUTF(); //skickar det vi skrev till textrutan
 		controller.newResponse(mess); // skickar det vi skrev till metod i controller
 //		disconnect();
 			
