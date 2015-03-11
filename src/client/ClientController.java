@@ -80,16 +80,14 @@ public class ClientController {
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
 		
 		Message newMess = new Message(this.username, mess, image);
-		LinkedList<String> toUsersLL = new LinkedList();
 		
-		toUsersLL.add(this.username);
+		newMess.setTo(this.username);
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.length; i++) {
-				toUsersLL.add(toUsers[i]);
+				newMess.setTo(toUsers[i]);;
 			}
 		}
 		
-		toUsersLL = null;
 		newMess = null;
 	}
 
