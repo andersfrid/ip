@@ -12,6 +12,12 @@ public class Message implements iMessage{
 	private Icon image = null; 
 	private LinkedList<String> toUsers;
 	
+	public Message(String username, String message, Icon image){
+		this.username = username;
+		this.message = message;
+		this.image = image;
+	}
+	
 	public String getUsername() {
 		return this.username;
 	}
