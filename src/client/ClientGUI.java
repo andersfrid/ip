@@ -72,15 +72,11 @@ public class ClientGUI extends JPanel implements ActionListener {
 	
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == btnConnect) {
-    		controller.setUser(tfUsername.getText());
+//    		controller.setUser(tfUsername.getText());
+//    		controller.sendUsernameToServer();
+    		//Stänga fönster
     	}
-//    		boolean isConnected = false;
-//    		if (isConnected == true) {
-//			System.out.println("User: " + tfUsername.getText() + " has successfully connected!");
-//    		}
-//    		else {
-//    			System.out.println("Connection failed.");
-//    		} 
+    	
     	else if (e.getSource() == btnClose) {
     		System.exit(0);
     	}

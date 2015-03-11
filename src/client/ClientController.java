@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 public class ClientController {
 	private String username;
-	private LinkedList<String> usersOnline;
+	private LinkedList<String> usersOnServer;
 
 	private GUIMess gui;
 
@@ -31,17 +31,19 @@ public class ClientController {
 	public ClientController(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
-		// connect();
-		// sendUsernameToServer();
+	
+		connect();
+		startGUIMess();
 		listener = new Listener();
-
 	}
 
 	public void setUser(String username) {
 		this.username = username;
-		sendUsernameToServer();
 	}
-
+	
+	public LinkedList<String> getListOnUsers(){
+		return usersOnServer;
+	}
 
 	public void connect() {
 		try {
@@ -64,28 +66,28 @@ public class ClientController {
 		}
 	}
 
-	public void sendUsernameToServer() {
+	public void startGUIMess() {
 		try {
 			oos.writeObject(username);
-			usersOnline = (LinkedList<String>) ois.readObject();
+			usersOnServer = (LinkedList<String>) ois.readObject();
 		} catch (Exception e) {
 			System.err.println("Kan inte skicka användarnamn till Server!"
 					+ "Eller få tillbaka en lista");
 		}
+		new GUIMess(this);
+		
 	}
 
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
-		
+
 		Message newMess = new Message(this.username, mess, image);
-		newMess.setTo(this.username);
-		
+
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.length; i++) {
-				newMess.setTo(toUsers[i]);;
+				newMess.setTo(toUsers[i]);
 			}
 		}
-		
-		s
+
 	}
 
 	public void printMessage(Message mess) {
@@ -97,7 +99,7 @@ public class ClientController {
 			message = mess.getMessage();
 			image = mess.getImage();
 
-			// gui.writeMess(String author, String mess);
+			gui.writeMessage(author, message);
 		}
 	}
 
@@ -108,7 +110,7 @@ public class ClientController {
 		public Listener() {
 			start();
 		}
-
+		
 		public void run() {
 			try {
 				while (true) {

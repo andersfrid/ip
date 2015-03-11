@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javafx.scene.control.ScrollPane;
 
@@ -23,7 +24,9 @@ import javax.swing.JToggleButton;
 public class GUIMess extends JPanel implements ActionListener {
 	private ClientController controller;
 	
-	private JLabel online;
+	JCheckBox[] toUsers;
+	
+	private JLabel userslabel;
 	private JTextField JTFmessage = new JTextField();
 	private JButton JBSend = new JButton("Send");
 	private JButton JBLogout = new JButton("Logout");
@@ -36,11 +39,10 @@ public class GUIMess extends JPanel implements ActionListener {
 	private JPanel JPCenter, JPEast, JPSouth;
 	private JFrame frame;
 	private JScrollPane scrollPane;
-
-
+	
 	public GUIMess(ClientController controller) {
 		this.controller = controller;
-	
+
 		// CENTER
 		scrollPane = new JScrollPane(showMess);
 		JPCenter = new JPanel();
@@ -48,37 +50,28 @@ public class GUIMess extends JPanel implements ActionListener {
 		JPCenter.add(scrollPane);
 		scrollPane.setPreferredSize(new Dimension(500, 280));
 		showMess.setEditable(false);
-		
-
 
 		// EAST
-		JPEast = new JPanel(new GridLayout(6,1));
+		JPEast = new JPanel(new GridLayout(6, 1));
 		JPEast.setPreferredSize(new Dimension(140, 280));
 		JPEast.setBackground(Color.WHITE);
-		online = new JLabel("Online/Offline");
-		dav = new JToggleButton("David");
-		and = new JToggleButton("Andreas");
-		ande = new JToggleButton("Anders");
-		joa = new JToggleButton("Joakim");
-		joh = new JToggleButton("Johan");
-		dav.setForeground(Color.RED);
-		and.setForeground(Color.RED);
-		ande.setForeground(Color.RED);
-		joa.setForeground(Color.RED);
-		joh.setForeground(Color.RED);
-		online.setFont(font1);
-		dav.setFont(font2);
-		and.setFont(font2);
-		ande.setFont(font2);
-		joa.setFont(font2);
-		joh.setFont(font2);
-		JPEast.add(online);
-		JPEast.add(dav);
-		JPEast.add(and);
-		JPEast.add(ande);
-		JPEast.add(joa);
-		JPEast.add(joh);
+		userslabel = new JLabel("Användare:");
+//		dav.setForeground(Color.RED);
+//		and.setForeground(Color.RED);
+//		ande.setForeground(Color.RED);
+//		joa.setForeground(Color.RED);
+//		joh.setForeground(Color.RED);
+		userslabel.setFont(font1);
+//		dav.setFont(font2);
+//		and.setFont(font2);
+//		ande.setFont(font2);
+//		joa.setFont(font2);
+//		joh.setFont(font2);
+		JPEast.add(userslabel);
 
+		//Lägga till användare
+		generateCheckBoxes();
+		
 		// South
 		JPSouth = new JPanel();
 		JPSouth.setPreferredSize(new Dimension(400, 80));
@@ -97,13 +90,13 @@ public class GUIMess extends JPanel implements ActionListener {
 		JBAddFile.setFont(font2);
 		JBLogout.setFont(font2);
 		JBSendAll.setFont(font2);
-		
-		//Listeners
-		JBSend.addActionListener( this );
-		JBSendAll.addActionListener( this );
-		JBLogout.addActionListener( this );
-		JBAddFile.addActionListener( this );
-		
+
+		// Listeners
+		JBSend.addActionListener(this);
+		JBSendAll.addActionListener(this);
+		JBLogout.addActionListener(this);
+		JBAddFile.addActionListener(this);
+
 		// Frame
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(700, 400));
@@ -114,44 +107,58 @@ public class GUIMess extends JPanel implements ActionListener {
 		frame.add(JPSouth, BorderLayout.SOUTH);
 		frame.pack();
 	}
-	// visar text från client
-	public void showMessage(String mess){
-		showMess.insert(mess + "\n",0);
+
+	public void writeMessage(String author, String message){
+		//print i rutan
 	}
-
-
-
-	public void actionPerformed(ActionEvent e) {
-			if ( e.getSource() == JBSend){
-				controller.put(JTFmessage.getText());
-			}
-			if (e.getSource() == JBSendAll){
-				
-			}
-			if (e.getSource() == JBLogout){
-				
-			}
-			if (e.getSource() == JBAddFile){
-				
-			}
-			if (e.getSource() == dav){
-				
-			}
-			if (e.getSource() == and){
-				
-			}
-			if (e.getSource() == ande){
-				
-			}
-			if (e.getSource() == joa){
-				
-			}
-			if (e.getSource() == joh){
-				
-			}
+	
+	public void generateCheckBoxes() {
 		
-						
+		LinkedList<String> users = controller.getListOnUsers();
+	
+		toUsers = new JCheckBox[users.size()];
+		
+		for(int i = 0; i < users.size(); i++){
+			toUsers[i] = new JCheckBox(users.get(i));
+			JPEast.add(toUsers[i]);
+		}	
+	}
+	
+	
+	public void updateCheckBoxes(LinkedList<String> newUserList){
+		//Ska uppdatera listan
+	}
+	
+	public LinkedList<String> controllCheckedBoxes(){
+		LinkedList<String> isSelected = new LinkedList<String>();
+		int count = 0;
+		
+		for(int i = 0; i < toUsers.length; i++){
+			if(toUsers[i].isSelected()){
+				isSelected.add(toUsers[i].getText());
+				count++;
+			}
 		}
+
+		if(count >= toUsers.length)
+			return null;
+		
+		return isSelected;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == JBSend) {
+			controllCheckedBoxes();
+		}
+		if (e.getSource() == JBSendAll) {
+
+		}
+		if (e.getSource() == JBLogout) {
+
+		}
+		if (e.getSource() == JBAddFile) {
+
+		}
+	}
+	
 }
-
-
