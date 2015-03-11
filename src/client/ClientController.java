@@ -42,9 +42,6 @@ public class ClientController {
 		sendUsernameToServer();
 	}
 
-	public void sendMessege(String toUser) {
-
-	}
 
 	public void connect() {
 		try {
@@ -80,15 +77,15 @@ public class ClientController {
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
 		
 		Message newMess = new Message(this.username, mess, image);
-		
 		newMess.setTo(this.username);
+		
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.length; i++) {
 				newMess.setTo(toUsers[i]);;
 			}
 		}
 		
-		newMess = null;
+		s
 	}
 
 	public void printMessage(Message mess) {
