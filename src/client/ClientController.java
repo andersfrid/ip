@@ -77,12 +77,12 @@ public class ClientController {
 		}
 	}
 
-	public void sendMessage(String author, String mess, Icon image, String[] toUsers) {
+	public void sendMessage(String mess, Icon image, String[] toUsers) {
 		
-		Message newMess = new Message(author, mess, image);
+		Message newMess = new Message(this.username, mess, image);
 		LinkedList<String> toUsersLL = new LinkedList();
 		
-		toUsersLL.add(author);
+		toUsersLL.add(this.username);
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.length; i++) {
 				toUsersLL.add(toUsers[i]);
