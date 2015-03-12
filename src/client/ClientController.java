@@ -81,7 +81,7 @@ public class ClientController {
 			System.err.println("Kan inte skicka användarnamn till Server!"
 					+ "Eller få tillbaka en lista");
 		}
-		new GUIMess(this);
+		
 	}
 
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
