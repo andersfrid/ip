@@ -72,8 +72,8 @@ public class ClientGUI extends JPanel implements ActionListener {
 	
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == btnConnect) {
-//    		controller.setUser(tfUsername.getText());
-//    		controller.sendUsernameToServer();
+    				controller.setUser(tfUsername.getText());
+    				controller.startGUIMess();
     		//Stänga fönster
     	}
     	

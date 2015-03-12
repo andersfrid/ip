@@ -123,7 +123,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		if(keyCode == KeyEvent.VK_ENTER){
-			showMessage(JTFmessage.getText());
+//			showMessage(JTFmessage.getText());
 		}
 		
 	}

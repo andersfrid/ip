@@ -8,21 +8,23 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.LinkedList;
 
+import client.ClientController;
+import client.ClientGUI;
+
 public class MainServer {
 	private ServerSocket connSocket;
-	private int outPort = 3550;
+	private int outPort = 3520;
 	private ClientListener listener = new ClientListener();
 	private LinkedList<User> userList = new LinkedList<User>();
 	
 	public MainServer() throws IOException
 	{
-		connSocket = new ServerSocket(3550);
-		
+		connSocket = new ServerSocket(3520, 0, InetAddress.getByName(null));
 		listener.start();
 	}
 	
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws IOException {
+		new MainServer();
 	}
 	
 	private class MessageHandler extends Thread
@@ -130,11 +132,16 @@ public class MainServer {
 			{
 				try 
 				{
+					System.out.println("startar asdadasdasd");
 					socket = connSocket.accept();
 					
+					ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-					
-					Object obj =  inStream.readObject();
+
+					System.out.println("snart");
+					Object obj =  inStream.readUTF();
+					System.out.println("något???");
+					System.out.println(obj.toString());
 					
 					if(obj instanceof String)
 					{
@@ -154,7 +161,7 @@ public class MainServer {
 				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

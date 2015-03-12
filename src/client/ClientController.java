@@ -29,53 +29,59 @@ public class ClientController {
 	private Listener listener;
 
 	public ClientController(String ip, int port) {
+		System.out.println("1");
 		this.ip = ip;
 		this.port = port;
-	
+		System.out.println("2");
 		connect();
-		startGUIMess();
-		listener = new Listener();
+		
+		//listener = new Listener();
 	}
 
 	public void setUser(String username) {
 		this.username = username;
 	}
-	
-	public LinkedList<String> getListOnUsers(){
+
+	public LinkedList<String> getListOnUsers() {
 		return usersOnServer;
 	}
 
 	public void connect() {
 		try {
-			socket = new Socket(ip, port);
+			System.out.println("3");
+			socket = new Socket(this.ip, this.port);
 			socket.setSoTimeout(5000);
-			ois = new ObjectInputStream(new BufferedInputStream(
-					socket.getInputStream()));
-			oos = new ObjectOutputStream(new BufferedOutputStream(
-					socket.getOutputStream()));
+			System.out.println("4");
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			ois = new ObjectInputStream(socket.getInputStream());
+			System.out.println("5");
+			System.out.println("kan koppla med server");
 		} catch (Exception e) {
 			System.err.println("Client kan inte koppla med server!");
+			System.out.println(e);
 		}
 	}
 
-	public void disconnect() {
-		try {
-			socket.close();
-		} catch (Exception e) {
-			System.err.println("går inte stänga socket");
-		}
-	}
-
+	
 	public void startGUIMess() {
 		try {
-			oos.writeObject(username);
-			usersOnServer = (LinkedList<String>) ois.readObject();
+			System.out.println("Försöker starta");
+			oos.writeUTF(this.username);
+			oos.flush();
+			Object obj = ois.readObject();
+			System.out.println("här skiter de sig");
+			System.out.println(obj.toString());
+//			if(obj instanceof LinkedList){
+//				usersOnServer = (LinkedList<String>)obj;
+//				System.out.println("Får något!");
+//			}
+			
+			
 		} catch (Exception e) {
 			System.err.println("Kan inte skicka användarnamn till Server!"
 					+ "Eller få tillbaka en lista");
 		}
 		new GUIMess(this);
-		
 	}
 
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
@@ -110,7 +116,7 @@ public class ClientController {
 		public Listener() {
 			start();
 		}
-		
+
 		public void run() {
 			try {
 				while (true) {
@@ -123,6 +129,14 @@ public class ClientController {
 	}
 
 	public static void main(String[] args) {
-		new ClientGUI(new ClientController("localhost", 3550));
+		new ClientGUI(new ClientController("127.0.0.1",3520));
+	}
+	
+	public void disconnect() {
+		try {
+			socket.close();
+		} catch (Exception e) {
+			System.err.println("går inte stänga socket");
+		}
 	}
 }
