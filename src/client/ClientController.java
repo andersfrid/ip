@@ -68,20 +68,21 @@ public class ClientController {
 			System.out.println("Försöker starta");
 			oos.writeUTF(this.username);
 			oos.flush();
+			
 			Object obj = ois.readObject();
-			System.out.println("här skiter de sig");
-			System.out.println(obj.toString());
-//			if(obj instanceof LinkedList){
-//				usersOnServer = (LinkedList<String>)obj;
-//				System.out.println("Får något!");
-//			}
+			
+			if(obj instanceof LinkedList){
+				usersOnServer = (LinkedList<String>)obj;
+				System.out.println("Får något!");
+			}
 			
 			
 		} catch (Exception e) {
 			System.err.println("Kan inte skicka användarnamn till Server!"
 					+ "Eller få tillbaka en lista");
 		}
-		new GUIMess(this);
+		
+		//new GUIMess(this);
 	}
 
 	public void sendMessage(String mess, Icon image, String[] toUsers) {

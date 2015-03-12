@@ -42,7 +42,8 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	private JFrame frame;
 	private JScrollPane scrollPane;
 	
-	public GUIMess(ClientController controller) {
+//	public GUIMess(ClientController controller) {
+	public GUIMess(){
 		this.controller = controller;
 
 		// CENTER
@@ -54,23 +55,13 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		showMess.setEditable(false);
 
 		// EAST
-		JPEast = new JPanel(new GridLayout(6, 1));
+		JPEast = new JPanel(new GridLayout(10,1));
 		JPEast.setPreferredSize(new Dimension(140, 280));
 		JPEast.setBackground(Color.WHITE);
 		userslabel = new JLabel("Användare:");
-//		dav.setForeground(Color.RED);
-//		and.setForeground(Color.RED);
-//		ande.setForeground(Color.RED);
-//		joa.setForeground(Color.RED);
-//		joh.setForeground(Color.RED);
 		userslabel.setFont(font1);
-//		dav.setFont(font2);
-//		and.setFont(font2);
-//		ande.setFont(font2);
-//		joa.setFont(font2);
-//		joh.setFont(font2);
 		JPEast.add(userslabel);
-
+		
 		//Lägga till användare
 		generateCheckBoxes();
 		
@@ -115,29 +106,18 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		//print i rutan
 	}
 	
-	public void keyTyped(KeyEvent e) {
-	
-		
-	}
-
-	public void keyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		if(keyCode == KeyEvent.VK_ENTER){
-//			showMessage(JTFmessage.getText());
-		}
-		
-	}
-
-	
-	public void keyReleased(KeyEvent e) {
-
-		
-	}
 	
 	public void generateCheckBoxes() {
 		
-		LinkedList<String> users = controller.getListOnUsers();
-	
+//		LinkedList<String> users = controller.getListOnUsers();
+		
+		LinkedList<String> users = new LinkedList<String>();
+		users.add("Andreas");
+		users.add("David");
+		users.add("David");
+
+
+		
 		toUsers = new JCheckBox[users.size()];
 		
 		for(int i = 0; i < users.size(); i++){
@@ -152,6 +132,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	}
 	
 	public LinkedList<String> controllCheckedBoxes(){
+		
 		LinkedList<String> isSelected = new LinkedList<String>();
 		int count = 0;
 		
@@ -181,6 +162,21 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		if (e.getSource() == JBAddFile) {
 
 		}
+	}
+	
+	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {}
+	
+	public void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		if(keyCode == KeyEvent.VK_ENTER){
+//			showMessage(JTFmessage.getText());
+			System.out.println(JTFmessage.getText());
+		}	
+	}
+	
+	public static void main(String[] args) {
+		new GUIMess();
 	}
 	
 }
