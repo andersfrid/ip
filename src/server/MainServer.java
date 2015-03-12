@@ -2,11 +2,9 @@ package server;
 
 import interfaces.iMessage;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import client.ClientController;
@@ -16,19 +14,12 @@ public class MainServer {
 	private ServerSocket connSocket;
 	private int outPort = 3520;
 	private ClientListener listener = new ClientListener();
-	private LinkedList<User> userList;
+	private UserList userList = new UserList();
 
 	public MainServer() throws IOException {
 		connSocket = new ServerSocket(3520, 0, InetAddress.getByName(null));
 
-		userList = fillUserList();
-
 		listener.start();
-	}
-
-	private LinkedList<User> fillUserList() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -59,7 +50,7 @@ public class MainServer {
 
 					for (String user : listOfUsers) {
 						try {
-							User u = findUser(user);
+							User u = userList.findUser(user);
 
 							if (u != null && u.OutStream != null) {
 
@@ -92,30 +83,6 @@ public class MainServer {
 					userMessage.getMessage());
 		}
 
-		private User findUser(String username) throws IOException {
-			for (User u : userList) {
-				if (u.Username == username) {
-					return u;
-				}
-			}
-
-			File yourFile = new File("Messages/" + username + ".txt");
-			if (!yourFile.exists()) {
-				try {
-					logger.logError(username);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				return null;
-			}
-			else
-			{
-				return new User(username,null,null);
-			}	
-		}
-
 		private void sendToAll() throws IOException {
 			for (User u : userList) {
 				synchronized (u.OutStream) {
@@ -139,9 +106,6 @@ public class MainServer {
 					System.out.println("startar asdadasdasd");
 					socket = connSocket.accept();
 
-					// ObjectOutputStream outStream = new
-					// ObjectOutputStream(socket.getOutputStream());
-
 					ObjectInputStream inStream = new ObjectInputStream(
 							socket.getInputStream());
 
@@ -149,11 +113,19 @@ public class MainServer {
 					System.out.println(obj);
 
 					if (obj instanceof String) {
-						// TODO Kolla senaste meddelande.
 						User newUser = new User((String) obj,socket.getInetAddress(),socket.getOutputStream());
 
-						userList.add(newUser);
-						// TODO Ta bort updateClientLists();?
+						if(!userList.exists(newUser))
+						{
+							userList.add(newUser);
+						}
+						else 
+						{
+							//TODO Check so user isn't online already, to counter "username stealing".
+							userList.updateUser(newUser);
+						}
+						
+						updateClientLists(userList.getUserList(),newUser);
 					} else if (obj instanceof iMessage) {
 						MessageHandler handler = new MessageHandler(
 								(iMessage) obj);
@@ -167,13 +139,11 @@ public class MainServer {
 			}
 		}
 
-//		private void updateClientLists() throws IOException {
-//			for (User u : userList) {
-//				synchronized (u.OutStream) {
-//					u.OutStream.writeObject(userList);
-//					u.OutStream.flush();
-//				}
-//			}
-//		}
+		private void updateClientLists(ArrayList<String> list,User user) throws IOException {
+			synchronized (user.OutStream) {
+				user.OutStream.writeObject(list);
+				user.OutStream.flush();
+			}
+		}
 	}
 }

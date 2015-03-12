@@ -11,6 +11,7 @@ public class User {
 	public String Username;
 	public InetAddress Address;
 	public ObjectOutputStream OutStream;
+	public File messageFile;
 	
 	public User(String name,InetAddress address, OutputStream stream) throws IOException
 	{
@@ -19,6 +20,18 @@ public class User {
 		OutStream = new ObjectOutputStream(stream);
 		
 		CheckMessageFile();
+	}
+	
+	public User(String name,File file)
+	{
+		Username = name;
+		
+		messageFile = file;
+	}
+	
+	public User(String name)
+	{
+		Username = name;
 	}
 
 	private void CheckMessageFile() {
@@ -48,6 +61,8 @@ public class User {
 				e.printStackTrace();
 			}
 		}
+		
+		messageFile = file;
 	}
 
 	/**

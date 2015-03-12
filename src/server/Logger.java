@@ -29,7 +29,6 @@ public class Logger {
 	public void logError(String username) throws IOException {
 		log("Could not find user " + username);
 	}
-
 	/**
 	 * Logs a users login.
 	 * 

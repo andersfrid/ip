@@ -77,15 +77,10 @@ public class ClientController {
 			}
 			
 			
-		} catch (Exception e) {
-			System.err.println("Kan inte skicka användarnamn till Server!"
-					+ "Eller få tillbaka en lista");
+		} 
+		catch (Exception e) {
+			System.err.println("Kan inte skicka användarnamn till Server! Eller få tillbaka en lista");
 		}
-		
-<<<<<<< HEAD
-		//new GUIMess(this);
-=======
->>>>>>> c27ba7a0cc250ae40ef66f23c22137da28b04eba
 	}
 
 	public void sendMessage(String mess, Icon image, String[] toUsers) {
