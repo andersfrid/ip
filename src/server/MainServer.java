@@ -25,6 +25,7 @@ public class MainServer {
 	
 	public static void main(String[] args) throws IOException {
 		new MainServer();
+		new ClientGUI(new ClientController("127.0.0.1",3520));
 	}
 	
 	private class MessageHandler extends Thread
@@ -138,16 +139,14 @@ public class MainServer {
 					ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
 
-					System.out.println("snart");
 					Object obj =  inStream.readUTF();
-					System.out.println("något???");
-					System.out.println(obj.toString());
+					System.out.println(obj);
 					
 					if(obj instanceof String)
 					{
-						ObjectOutputStream stream = new ObjectOutputStream(socket.getOutputStream());
-						
-						User newUser = new User((String)obj,socket.getInetAddress(), stream);
+						//TODO Kolla om användare redan finns!
+						//TODO Bry dig inte om dom är online eller inte.
+						User newUser = new User((String)obj,socket.getInetAddress(), outStream);
 										
 						userList.add(newUser);
 						updateClientLists();	
