@@ -95,7 +95,11 @@ public class MainServer {
 			}
 		}
 	}
-
+	/**
+	 * Handles the messages coming in, and waits for users to log in.
+	 * 
+	 * @author hiplobbe
+	 */
 	private class ClientListener extends Thread {
 		private Socket socket;
 
@@ -109,11 +113,12 @@ public class MainServer {
 					ObjectInputStream inStream = new ObjectInputStream(
 							socket.getInputStream());
 
-					Object obj = inStream.readUTF();
+					Object obj = inStream.readObject();
 					System.out.println(obj);
 
-					if (obj instanceof String) {
-						User newUser = new User((String) obj,socket.getInetAddress(),socket.getOutputStream());
+					if (obj instanceof Login) {
+						Login log = (Login)obj;
+						User newUser = new User(log.Username,socket.getInetAddress(),socket.getOutputStream());
 
 						if(!userList.exists(newUser))
 						{
