@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 import javax.swing.Icon;
 
-public interface iMessage {
+public interface iMessage{
 	
 	public String getUsername();
 	public void setUsername(String username);

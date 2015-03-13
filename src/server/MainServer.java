@@ -1,5 +1,6 @@
 package server;
 
+import interfaces.Login;
 import interfaces.iMessage;
 
 import java.io.*;
@@ -17,7 +18,7 @@ public class MainServer {
 	private UserList userList = new UserList();
 
 	public MainServer() throws IOException {
-		connSocket = new ServerSocket(3520, 0, InetAddress.getByName(null));
+		connSocket = new ServerSocket(outPort, 0, InetAddress.getByName(null));
 
 		listener.start();
 	}
@@ -26,7 +27,11 @@ public class MainServer {
 		new MainServer();
 		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
-
+	/**
+	 * Sends the given message to the users chosen, or to all users.
+	 * 
+	 * @author hiplobbe
+	 */
 	private class MessageHandler extends Thread {
 		private UserMessage userMessage;
 		private Logger logger = new Logger();
