@@ -116,30 +116,29 @@ public class MainServer {
 					System.out.println("startar asdadasdasd");
 					socket = connSocket.accept();
 
+					ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
+					
 					ObjectInputStream inStream = new ObjectInputStream(
 							socket.getInputStream());
 
-					ObjectOutputStream outStream = new ObjectOutputStream(
-							socket.getOutputStream());
-					
 					Object obj = inStream.readObject();
 					System.out.println(obj);
 
 					if (obj instanceof Login) {
-						Login log = (Login) obj;
-						User newUser = new User(log.Username,
-								socket.getInetAddress(),
-								socket.getOutputStream());
+						Login log = (Login)obj;
+						User newUser = new User(log.Username,socket.getInetAddress(),outStream);
 
-						if (!userList.exists(newUser)) {
+						if(!userList.exists(newUser))
+						{
 							userList.add(newUser);
-						} else {
-							// TODO Check so user isn't online already, to
-							// counter "username stealing".
+						}
+						else 
+						{
+							//TODO Check so user isn't online already, to counter "username stealing".
 							userList.updateUser(newUser);
 						}
-
-						updateClientLists(userList.getUserList(), newUser);
+						
+						updateClientLists(userList.getUserList(),newUser);
 					} else if (obj instanceof iMessage) {
 						MessageHandler handler = new MessageHandler(
 								(iMessage) obj);
@@ -153,8 +152,7 @@ public class MainServer {
 			}
 		}
 
-		private void updateClientLists(ArrayList<String> list, User user)
-				throws IOException {
+		private void updateClientLists(ArrayList<Login> list,User user) throws IOException {
 			synchronized (user.OutStream) {
 				user.OutStream.writeObject(list);
 				user.OutStream.flush();
