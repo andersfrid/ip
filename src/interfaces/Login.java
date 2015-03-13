@@ -1,6 +1,8 @@
 package interfaces;
 
-public class Login {
+import java.io.Serializable;
+
+public class Login implements Serializable{
 	public String Username;
 	
 	public Login(String name)

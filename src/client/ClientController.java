@@ -52,9 +52,10 @@ public class ClientController {
 			System.out.println("3");
 			socket = new Socket(this.ip, this.port);
 			socket.setSoTimeout(5000);
+			System.out.println(socket.toString());
 			System.out.println("4");
-			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
+			oos = new ObjectOutputStream(socket.getOutputStream());
 			System.out.println("5");
 			System.out.println("kan koppla med server");
 		} catch (Exception e) {
@@ -62,6 +63,7 @@ public class ClientController {
 			System.out.println(e);
 		}
 	}
+
 
 	public void startGUIMess() {
 		try {
@@ -74,16 +76,17 @@ public class ClientController {
 		
 		try {
 			Object obj = ois.readObject();
-
+			System.out.println("hej");
+			
 			if (obj instanceof ArrayList) {
-				usersOnServer = (ArrayList<String>) obj;
+				usersOnServer = (ArrayList<String>)obj;
 				System.out.println("Får något!");
 				usersOnServer.toString();
 			}
 
 		} catch (Exception e) {
-			System.err
-					.println("Kan inte få tillbaka en lista");
+			System.err.println("Kan inte få tillbaka en lista");
+			System.err.println(e);
 		}
 	}
 

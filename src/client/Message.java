@@ -1,12 +1,13 @@
 package client;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.swing.Icon;
 
 import interfaces.iMessage;
 
-public class Message implements iMessage{
+public class Message implements iMessage, Serializable {
 	private String username;
 	private String message;
 	private Icon image = null; 
