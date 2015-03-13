@@ -1,5 +1,6 @@
 package server;
 
+import interfaces.Login;
 import interfaces.iMessage;
 
 import java.io.*;
@@ -17,7 +18,7 @@ public class MainServer {
 	private UserList userList = new UserList();
 
 	public MainServer() throws IOException {
-		connSocket = new ServerSocket(3520, 0, InetAddress.getByName(null));
+		connSocket = new ServerSocket(outPort, 0, InetAddress.getByName(null));
 
 		listener.start();
 	}
@@ -27,6 +28,11 @@ public class MainServer {
 		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
+	/**
+	 * Sends the given message to the users chosen, or to all users.
+	 * 
+	 * @author hiplobbe
+	 */
 	private class MessageHandler extends Thread {
 		private UserMessage userMessage;
 		private Logger logger = new Logger();
@@ -57,9 +63,8 @@ public class MainServer {
 								sendToSpecific(u, userMessage);
 
 								logger.saveToMessage(u.Username, userMessage);
-							}
-							else {
-								logger.saveToMessage(u.Username,userMessage);
+							} else {
+								logger.saveToMessage(u.Username, userMessage);
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -95,6 +100,7 @@ public class MainServer {
 			}
 		}
 	}
+
 	/**
 	 * Handles the messages coming in, and waits for users to log in.
 	 * 
@@ -113,24 +119,27 @@ public class MainServer {
 					ObjectInputStream inStream = new ObjectInputStream(
 							socket.getInputStream());
 
+					ObjectOutputStream outStream = new ObjectOutputStream(
+							socket.getOutputStream());
+					
 					Object obj = inStream.readObject();
 					System.out.println(obj);
 
 					if (obj instanceof Login) {
-						Login log = (Login)obj;
-						User newUser = new User(log.Username,socket.getInetAddress(),socket.getOutputStream());
+						Login log = (Login) obj;
+						User newUser = new User(log.Username,
+								socket.getInetAddress(),
+								socket.getOutputStream());
 
-						if(!userList.exists(newUser))
-						{
+						if (!userList.exists(newUser)) {
 							userList.add(newUser);
-						}
-						else 
-						{
-							//TODO Check so user isn't online already, to counter "username stealing".
+						} else {
+							// TODO Check so user isn't online already, to
+							// counter "username stealing".
 							userList.updateUser(newUser);
 						}
-						
-						updateClientLists(userList.getUserList(),newUser);
+
+						updateClientLists(userList.getUserList(), newUser);
 					} else if (obj instanceof iMessage) {
 						MessageHandler handler = new MessageHandler(
 								(iMessage) obj);
@@ -144,7 +153,8 @@ public class MainServer {
 			}
 		}
 
-		private void updateClientLists(ArrayList<String> list,User user) throws IOException {
+		private void updateClientLists(ArrayList<String> list, User user)
+				throws IOException {
 			synchronized (user.OutStream) {
 				user.OutStream.writeObject(list);
 				user.OutStream.flush();

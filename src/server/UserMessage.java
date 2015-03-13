@@ -2,11 +2,12 @@ package server;
 
 import interfaces.iMessage;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.swing.Icon;
 
-public class UserMessage implements iMessage {
+public class UserMessage implements iMessage,Serializable{
 	private String Username;
 	private String TextMessage;
 	private Icon Image;

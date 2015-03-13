@@ -1,4 +1,4 @@
-package server;
+package interfaces;
 
 public class Login {
 	public String Username;

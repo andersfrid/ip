@@ -71,6 +71,7 @@ public class ClientController {
 		} catch (Exception e) {
 			System.err.println("Kan inte skicka användarnamn till Server!");
 		}
+		
 		try {
 			Object obj = ois.readObject();
 
