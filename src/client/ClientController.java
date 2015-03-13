@@ -1,5 +1,6 @@
 package client;
 
+import interfaces.Login;
 import interfaces.iMessage;
 
 import java.io.BufferedInputStream;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -16,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 public class ClientController {
 	private String username;
-	private LinkedList<String> usersOnServer;
+	private ArrayList<String> usersOnServer;
 
 	private GUIMess gui;
 
@@ -34,15 +35,15 @@ public class ClientController {
 		this.port = port;
 		System.out.println("2");
 		connect();
-		
-		//listener = new Listener();
+
+		// listener = new Listener();
 	}
 
 	public void setUser(String username) {
 		this.username = username;
 	}
 
-	public LinkedList<String> getListOnUsers() {
+	public ArrayList<String> getListOnUsers() {
 		return usersOnServer;
 	}
 
@@ -62,24 +63,26 @@ public class ClientController {
 		}
 	}
 
-	
 	public void startGUIMess() {
 		try {
-			System.out.println("Försöker starta");
-			oos.writeUTF(this.username);
+			oos.writeObject(new Login(this.username));
 			oos.flush();
-			
+
+		} catch (Exception e) {
+			System.err.println("Kan inte skicka användarnamn till Server!");
+		}
+		try {
 			Object obj = ois.readObject();
-			
-			if(obj instanceof LinkedList){
-				usersOnServer = (LinkedList<String>)obj;
+
+			if (obj instanceof ArrayList) {
+				usersOnServer = (ArrayList<String>) obj;
 				System.out.println("Får något!");
+				usersOnServer.toString();
 			}
-			
-			
-		} 
-		catch (Exception e) {
-			System.err.println("Kan inte skicka användarnamn till Server! Eller få tillbaka en lista");
+
+		} catch (Exception e) {
+			System.err
+					.println("Kan inte få tillbaka en lista");
 		}
 	}
 
@@ -128,9 +131,9 @@ public class ClientController {
 	}
 
 	public static void main(String[] args) {
-		new ClientGUI(new ClientController("127.0.0.1",3520));
+		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
-	
+
 	public void disconnect() {
 		try {
 			socket.close();
