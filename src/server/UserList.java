@@ -108,12 +108,12 @@ public class UserList implements Serializable,Iterable<User>
 		}
 	}
 
-	public ArrayList<Login> getUserList() {
-		ArrayList<Login> returnList = new ArrayList<Login>();
+	public ArrayList<String> getUserList() {
+		ArrayList<String> returnList = new ArrayList<String>();
 		
 		for(User u : list)
 		{
-			returnList.add(new Login(u.Username));
+			returnList.add(u.Username);
 		}
 		
 		return returnList;

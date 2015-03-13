@@ -13,11 +13,11 @@ public class User {
 	public ObjectOutputStream OutStream;
 	public File messageFile;
 	
-	public User(String name,InetAddress address, OutputStream stream) throws IOException
+	public User(String name,InetAddress address, ObjectOutputStream stream) throws IOException
 	{
 		Username = name;
 		Address = address;
-		OutStream = new ObjectOutputStream(stream);
+		OutStream = stream;
 		
 		CheckMessageFile();
 	}

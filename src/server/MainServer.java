@@ -5,6 +5,7 @@ import interfaces.iMessage;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -16,6 +17,7 @@ public class MainServer {
 	private int outPort = 3520;
 	private ClientListener listener = new ClientListener();
 	private UserList userList = new UserList();
+	private boolean loaded = false;
 
 	public MainServer() throws IOException {
 		connSocket = new ServerSocket(outPort, 0, InetAddress.getByName(null));
@@ -25,7 +27,16 @@ public class MainServer {
 
 	public static void main(String[] args) throws IOException {
 		new MainServer();
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
+		
+		try 
+		{
+			Thread.sleep(4000);
+			new ClientGUI(new ClientController("127.0.0.1", 3520));
+		} 
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}	
 	}
 
 	/**
@@ -152,10 +163,13 @@ public class MainServer {
 			}
 		}
 
-		private void updateClientLists(ArrayList<Login> list,User user) throws IOException {
+		private void updateClientLists(ArrayList<String> list,User user) throws IOException {		
 			synchronized (user.OutStream) {
-				user.OutStream.writeObject(list);
-				user.OutStream.flush();
+				for(String s : list)
+				{
+					user.OutStream.write(s.getBytes());
+					user.OutStream.flush();
+				}		
 			}
 		}
 	}

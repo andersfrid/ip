@@ -3,12 +3,10 @@ package client;
 import interfaces.Login;
 import interfaces.iMessage;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
@@ -51,7 +49,7 @@ public class ClientController {
 		try {
 			System.out.println("3");
 			socket = new Socket(this.ip, this.port);
-			socket.setSoTimeout(5000);
+			socket.setSoTimeout(70000);
 			System.out.println(socket.toString());
 			System.out.println("4");
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -67,6 +65,12 @@ public class ClientController {
 
 	public void startGUIMess() {
 		try {
+			while(socket == null)
+			{
+				Thread.sleep(1000);
+				connect();
+			}
+			
 			oos.writeObject(new Login(this.username));
 			oos.flush();
 
@@ -75,16 +79,29 @@ public class ClientController {
 		}
 		
 		try {
-			Object obj = ois.readObject();
-			System.out.println("hej");
-			
-			if (obj instanceof ArrayList) {
-				usersOnServer = (ArrayList<String>)obj;
-				System.out.println("Får något!");
-				usersOnServer.toString();
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while(((bytesRead = ois.read(buffer)) != -1))
+			{
+				String s = new String(buffer);
+				System.out.println(s);
 			}
-
-		} catch (Exception e) {
+			
+			
+//			ArrayList<String> obj = (ArrayList<String>)ois.readObject();
+//			System.out.println("hej");
+//			
+//			if (obj instanceof ArrayList) {
+////				usersOnServer = (ArrayList<String>)obj;
+//				System.out.println("Får något!");
+//				usersOnServer.toString();
+//			}
+		} 
+		catch(SocketTimeoutException e)
+		{
+			connect();
+		}
+		catch (Exception e) {
 			System.err.println("Kan inte få tillbaka en lista");
 			System.err.println(e);
 		}
