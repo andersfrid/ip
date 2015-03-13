@@ -1,5 +1,7 @@
 package server;
 
+import interfaces.Login;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -106,12 +108,12 @@ public class UserList implements Serializable,Iterable<User>
 		}
 	}
 
-	public ArrayList<String> getUserList() {
-		ArrayList<String> returnList = new ArrayList<String>();
+	public ArrayList<Login> getUserList() {
+		ArrayList<Login> returnList = new ArrayList<Login>();
 		
 		for(User u : list)
 		{
-			returnList.add(u.Username);
+			returnList.add(new Login(u.Username));
 		}
 		
 		return returnList;
