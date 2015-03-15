@@ -51,7 +51,7 @@ public class MainServer {
 						e.printStackTrace();
 					}
 				} else if (!userMessage.ToUser().isEmpty()) {
-					LinkedList<String> listOfUsers = userMessage.ToUser();
+					ArrayList<String> listOfUsers = userMessage.ToUser();
 
 					for (String user : listOfUsers) {
 						try {
@@ -124,17 +124,34 @@ public class MainServer {
 					
 					Object obj = inStream.readObject();
 					
-					ArrayList arr = new ArrayList<String>();
+					ArrayList<String> arr = new ArrayList<String>();
 					if(obj instanceof String){
-						obj = (String)obj;
-						System.out.println(obj);
-						//lägg till en ny användare.
+//						obj = (String)obj;
+//						System.out.println(obj);
 						
-						arr.add(obj);
+						User newUser = new User((String)obj,
+								socket.getInetAddress(), outStream);
 						
-						for(int i = 0; i < 6; i++){
-							arr.add("HEJ"+i);
+						if (!userList.exists(newUser)) 
+						{
+							userList.add(newUser);
+						} 
+						else 
+						{
+							userList.updateUser(newUser);
 						}
+						
+						for(User u : userList)
+						{
+							arr.add(u.Username);
+						}
+						
+//						for(int i = 0; i < 6; i++){
+//							arr.add("HEJ"+i);
+//						}
+						
+//						arr = userList.getUserList();
+						
 						System.out.println("Skriver ut från server : " + arr);
 						outStream.writeObject(arr);
 						outStream.flush();

@@ -3,6 +3,7 @@ package server;
 import interfaces.iMessage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.Icon;
@@ -11,8 +12,8 @@ public class UserMessage implements iMessage,Serializable{
 	private String Username;
 	private String TextMessage;
 	private Icon Image;
-	private boolean IsPublic;
-	private LinkedList<String> ToUser;
+//	private boolean IsPublic;
+	private ArrayList<String> ToUser;
 	
 	@Override
 	public String getMessage() {
@@ -51,7 +52,7 @@ public class UserMessage implements iMessage,Serializable{
 	}
 
 	@Override
-	public LinkedList<String> ToUser() {
+	public ArrayList<String> ToUser() {
 		return ToUser;
 	}
 

@@ -140,7 +140,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 
 	public void generateCheckBoxes(ArrayList<String> users) {
 		toUsers = new JCheckBox[users.size()-1];
-		for (int i = 0; i < users.size(); i++) {
+		for (int i = 0; i < users.size() - 1; i++) {
 			if (!(users.get(i).equals(controller.getUser()))) {
 				toUsers[i] = new JCheckBox(users.get(i));
 				JPEast.add(toUsers[i]);

@@ -4,20 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable{
 	public String Username;
 	public InetAddress Address;
 	public ObjectOutputStream OutStream;
 	public File messageFile;
 	
-	public User(String name,InetAddress address, OutputStream stream) throws IOException
+	public User(String name,InetAddress address, ObjectOutputStream stream) throws IOException
 	{
 		Username = name;
 		Address = address;
-		OutStream = new ObjectOutputStream(stream);
+		OutStream = stream;
 		
 		CheckMessageFile();
 	}
