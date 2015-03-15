@@ -97,7 +97,7 @@ public class ClientController {
 		gui = new GUIMess(this);
 		printMessage(new Message("Kuckelemuu", "Hej jag heter kuckelemuuu", null));
 		printMessage(new Message("Andreas", "Hej jag heter Andreas", null));
-		printMessage(new Message("Emelie", "Hej jag heter Emelie", null));
+		printMessage(new Message("Per", "Hej jag heter Per", null));
 		printMessage(new Message("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Desktop/gubbe.jpg")));
 		
 	}
