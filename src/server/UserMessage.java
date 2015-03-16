@@ -15,6 +15,12 @@ public class UserMessage implements iMessage,Serializable{
 //	private boolean IsPublic;
 	private ArrayList<String> ToUser;
 	
+	public UserMessage(String username, String message, Icon image){
+		this.Username = username;
+		this.TextMessage = message;
+		this.Image = image;
+	}
+	
 	@Override
 	public String getMessage() {
 		return TextMessage;

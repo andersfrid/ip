@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import server.UserMessage;
+
 public class ClientController {
 	private String username;
 	private ArrayList<String> usersOnServer;
@@ -95,16 +97,16 @@ public class ClientController {
 		}
 
 		gui = new GUIMess(this);
-		printMessage(new Message("Kuckelemuu", "Hej jag heter kuckelemuuu", null));
-		printMessage(new Message("Andreas", "Hej jag heter Andreas", null));
-		printMessage(new Message("Per", "Hej jag heter Per", null));
-		printMessage(new Message("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Desktop/gubbe.jpg")));
+		printMessage(new UserMessage("Kuckelemuu", "Hej jag heter kuckelemuuu", null));
+		printMessage(new UserMessage("Andreas", "Hej jag heter Andreas", null));
+		printMessage(new UserMessage("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Andreas/Desktop/amazing_horse.png")));
+		printMessage(new UserMessage("Per", "Hej jag heter Per", new ImageIcon("/Users/Andreas/Desktop/IMG_0027 3.JPG")));
 		
 	}
 
 	public void sendMessage(String mess, Icon image, ArrayList<String> toUsers) {
 
-		Message newMess = new Message(this.username, mess, image);
+		UserMessage newMess = new UserMessage(this.username, mess, image);
 
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.size(); i++) {
@@ -124,7 +126,7 @@ public class ClientController {
 
 	}
 
-	public void printMessage(Message mess) {
+	public void printMessage(UserMessage mess) {
 		if (mess instanceof iMessage) {
 			String author, message;
 			Icon image;
@@ -157,13 +159,11 @@ public class ClientController {
 
 					if (obj instanceof ArrayList) {
 						obj = (ArrayList<String>) obj;
-
 						// Uppdaterar listan i GUIMess..
-
 						gui.updateCheckBoxes((ArrayList<String>) obj);
 						
 					} else if (obj instanceof iMessage) {
-						printMessage((Message) obj);
+						printMessage((UserMessage) obj);
 					}
 
 				}

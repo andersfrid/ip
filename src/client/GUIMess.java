@@ -9,16 +9,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javafx.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,8 +35,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import com.sun.jmx.snmp.Timestamp;
+
 public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	private ClientController controller;
+	private Icon sendIcon = null;
+	
+	private JFileChooser jChooser = new JFileChooser();
+	private Calendar calendar;
 
 	JCheckBox[] toUsers;
 
@@ -56,7 +70,9 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		IconPanel = new JPanel(new BorderLayout());
 		IconPanel.setPreferredSize(new Dimension(200, 200));
 		iconLabel = new JLabel("Senaste skickade bild");
+		iconLabel.setFont(font1);
 		iconAuthor = new JLabel("Avsändare: ");
+		iconAuthor.setFont(font1);
 		lastIcon = new JLabel(new ImageIcon(""));
 		IconPanel.setForeground(Color.BLACK);
 		IconPanel.add(iconLabel, BorderLayout.NORTH);
@@ -124,17 +140,24 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void writeMessage(String author, String message, Icon image) {
-		showMess.setFont(mess);
-		showMess.append(author + ": " + message + "\n");
+		calendar = Calendar.getInstance();
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		String output = dateFormat.format(calendar.getTime())+" "+author + ": " + message;
 
 		if (image != null) {
-			lastIcon = (JLabel)image;
+			lastIcon.setIcon(image);
 			lastIcon.repaint();
-			iconAuthor.setText("Avsändare: "+author);
+			iconAuthor.setText("Avsändare: "+author+" ("+dateFormat.format(calendar.getTime())+")");
 			iconAuthor.repaint();
 			
+			output += "  | (Bifogad bild)";
 			//Föröska fixa det här imorgon!!!!!!
 		}
+		
+		output += "\n";
+		
+		showMess.setFont(mess);
+		showMess.append(output);
 
 	}
 
@@ -176,10 +199,30 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		return isSelected;
 	}
 
+	public Icon getIcon(){
+		Icon icon = this.sendIcon;
+		sendIcon = null;
+		return icon;
+	}
+	
+	public void saveIcon(){
+		File file;
+		BufferedImage img;
+		jChooser.showOpenDialog(null);
+		file = jChooser.getSelectedFile();
+		
+		try{
+			img=ImageIO.read(file);
+			sendIcon = new ImageIcon(img);
+		}
+		catch(Exception e){}
+		
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
 			controller.sendMessage(this.JTFmessage.getText(), null, controllCheckedBoxes());
-			writeMessage(controller.getUser(),JTFmessage.getText(),null);
+			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
 		}
 		if (e.getSource() == JBSendAll) {
 
@@ -188,7 +231,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 
 		}
 		if (e.getSource() == JBAddFile) {
-
+			saveIcon();
 		}
 	}
 
