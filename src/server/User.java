@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.text.*;
 
 public class User implements Serializable{
 	public String Username;
@@ -88,12 +91,19 @@ public class User implements Serializable{
 		@Override
 		public void run() {
 			try {		
-				Logger log = new Logger();
-				ArrayList<String> list = log.checkMessages(Username);
+				Logger log = new Logger();				
+				ArrayList<String> unWorkedList = log.checkMessages(Username);			
 				
-				if (list.size() > 0) {
+				if (unWorkedList.size() > 0) {
+					LinkedList<UserMessage> workedList = new LinkedList<UserMessage>();
+					
+					for(String s : unWorkedList)
+					{
+						workedList.add(reworkMessages(s));
+					}
+					
 					synchronized (OutStream) {
-						OutStream.writeObject(list);
+						OutStream.writeObject(workedList);
 						OutStream.flush();
 					}
 				}
@@ -102,6 +112,16 @@ public class User implements Serializable{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		public UserMessage reworkMessages(String message) throws ParseException
+		{
+			String[] array = message.split(";");
+			Date date = new SimpleDateFormat("yy-MM-dd HH:mm").parse(array[0]);
+			 
+			UserMessage newMess = new UserMessage(array[1],array[3],null,date);
+			
+			return newMess;
 		}
 	}	
 }

@@ -110,7 +110,7 @@ public class UserList implements Serializable,Iterable<User>
 		
 		for(User u : list)
 		{
-			if(u.OutStream == null)
+			if(u.OutStream != null)
 			{
 				returnList.add(u.Username+":Online");
 			}

@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -156,12 +157,18 @@ public class ClientController {
 					
 					Object obj = ois.readObject();
 
-					if (obj instanceof ArrayList) {
-						obj = (ArrayList<String>) obj;
+					if (obj instanceof ArrayList<?>) {
+						//obj = (ArrayList<String>) obj;
 						// Uppdaterar listan i GUIMess..
-//						gui.updateCheckBoxes((ArrayList<String>) obj);	
+						gui.updateCheckBoxes((ArrayList<String>) obj);	
 						System.out.println("här kommer jag inte in?");
 						
+					}
+					if (obj instanceof LinkedList<?>) {
+						for(UserMessage message : (LinkedList<UserMessage>)obj)
+						{
+							printMessage(message);
+						}
 					}
 					
 					if (obj instanceof UserMessage) {
@@ -176,9 +183,9 @@ public class ClientController {
 		}
 	}
 
-	public static void main(String[] args) {
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
-	}
+//	public static void main(String[] args) {
+//		new ClientGUI(new ClientController("127.0.0.1", 3520));
+//	}
 
 	public void disconnect() {
 		try {

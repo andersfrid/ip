@@ -1,6 +1,7 @@
 package server;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Logger {
@@ -36,7 +37,8 @@ public class Logger {
 	 * @throws IOException
 	 */
 	public void logUser(String username) throws IOException {
-		log(new Date() +" "+ username + " logged in");
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+		log(date +" "+ username + " logged in");
 	}
 
 	/**
@@ -52,10 +54,12 @@ public class Logger {
 	 */
 	public void logMessage(String username, String toUser, String message)
 			throws IOException {
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+		
 		if (toUser.isEmpty()) {
-			log(new Date() + ":" + username + " wrote " + message);
+			log(date + ":" + username + " wrote " + message);
 		} else {
-			log(new Date() + ":" + username + " wrote to " + toUser + ":"
+			log(date + ":" + username + " wrote to " + toUser + ":"
 					+ message);
 		}
 	}
@@ -98,9 +102,11 @@ public class Logger {
 			throws FileNotFoundException {
 		PrintWriter out = new PrintWriter(file);
 
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+		
 		synchronized (out) {
-			out.println(new Date() + ":" + userMessage.getUsername()
-					+ " wrote " + userMessage.getMessage());
+			out.println(date + ";" + userMessage.getUsername()
+					+ "; wrote; " + userMessage.getMessage());
 			out.flush();
 			out.close();
 		}

@@ -21,7 +21,7 @@ public class MainServer {
 
 	public static void main(String[] args) throws IOException {
 		new MainServer();
-//		new ClientGUI(new ClientController("127.0.0.1", 3520));
+		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
 	/**
@@ -115,14 +115,11 @@ public class MainServer {
 		}
 
 		private void sendToAll(UserMessage message) throws IOException {
-			System.out.println("Försöker send all");
 			for (User u : userList.getActiveUsers()) {
-				System.out.println("Försöker send all2");
-				//synchronized (u.OutStream) {
-					System.out.println(u.Username);
+				synchronized (u.OutStream) {
 					u.OutStream.writeObject(message);
 					u.OutStream.flush();
-				//}
+				}
 			}
 		}
 	}
@@ -152,10 +149,8 @@ public class MainServer {
 					
 					Object obj = inStream.readObject();
 					
-//					ArrayList<String> arr = new ArrayList<String>();
+
 					if(obj instanceof String){
-//						obj = (String)obj;
-//						System.out.println(obj);
 						
 						User newUser = new User((String)obj, socket.getInetAddress(), outStream,inStream);
 						
@@ -172,25 +167,7 @@ public class MainServer {
 						
 						logger.logUser(newUser.Username);
 						
-//						for(User u : userList)
-//						{
-//							if(u.OutStream == null)
-//							{
-//								arr.add(u.Username+":Online");
-//							}
-//							else 
-//							{
-//								arr.add(u.Username+":Offline");
-//							}
-//						}
-						
-//						for(int i = 0; i < 6; i++){
-//							arr.add("HEJ"+i);
-//						}
-						
-//						arr = userList.getUserList();
-						
-						System.out.println("Skriver ut från server : " + userList.getUserList());
+//						System.out.println("Skriver ut från server : " + userList.getUserList());
 						outStream.writeObject(userList.getUserList());
 						outStream.flush();
 						

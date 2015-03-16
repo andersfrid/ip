@@ -2,12 +2,19 @@ package server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.Icon;
 
 public class UserMessage implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String Username;
 	private String TextMessage;
 	private Icon Image;
+	private Date Date;
 //	private boolean IsPublic;
 	private ArrayList<String> ToUser = new ArrayList<String>();
 	
@@ -17,6 +24,12 @@ public class UserMessage implements Serializable{
 		this.Image = image;
 	}
 	
+	public UserMessage(String username, String message, Icon image,Date date){
+		this.Username = username;
+		this.TextMessage = message;
+		this.Image = image;
+		this.Date = date;
+	}
 	
 	public String getMessage() {
 		return TextMessage;
