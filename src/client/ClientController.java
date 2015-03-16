@@ -153,15 +153,21 @@ public class ClientController {
 		public void run() {
 			try {
 				while (true) {
+					
 					Object obj = ois.readObject();
 
 					if (obj instanceof ArrayList) {
 						obj = (ArrayList<String>) obj;
 						// Uppdaterar listan i GUIMess..
-						gui.updateCheckBoxes((ArrayList<String>) obj);	
+//						gui.updateCheckBoxes((ArrayList<String>) obj);	
+						System.out.println("här kommer jag inte in?");
+						
 					}
-					} else if (obj instanceof UserMessage) {
+					
+					if (obj instanceof UserMessage) {
+						System.out.println("hejhopppppp");
 						printMessage((UserMessage) obj);
+						System.out.println(((UserMessage) obj).getUsername()+"hehehhehehehe");
 					}
 
 				}

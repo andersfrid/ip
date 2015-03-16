@@ -21,7 +21,7 @@ public class MainServer {
 
 	public static void main(String[] args) throws IOException {
 		new MainServer();
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
+//		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
 	/**
@@ -61,6 +61,7 @@ public class MainServer {
 					if(obj instanceof UserMessage)
 					{
 						UserMessage userMessage = (UserMessage)obj;
+						System.out.println(userMessage.getMessage());
 						
 						if (userMessage.ToUser().size() == 0) {
 							try {
@@ -114,11 +115,14 @@ public class MainServer {
 		}
 
 		private void sendToAll(UserMessage message) throws IOException {
+			System.out.println("Försöker send all");
 			for (User u : userList.getActiveUsers()) {
-				synchronized (u.OutStream) {
+				System.out.println("Försöker send all2");
+				//synchronized (u.OutStream) {
+					System.out.println(u.Username);
 					u.OutStream.writeObject(message);
 					u.OutStream.flush();
-				}
+				//}
 			}
 		}
 	}

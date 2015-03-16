@@ -184,17 +184,12 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	public ArrayList<String> controllCheckedBoxes() {
 
 		ArrayList<String> isSelected = new ArrayList<String>();
-		int count = 0;
 
 		for (int i = 0; i < toUsers.length; i++) {
 			if (toUsers[i].isSelected()) {
 				isSelected.add(toUsers[i].getText());
-				count++;
 			}
 		}
-
-		if (count >= toUsers.length)
-			return null;
 
 		return isSelected;
 	}
