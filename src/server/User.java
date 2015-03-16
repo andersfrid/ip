@@ -24,6 +24,7 @@ public class User implements Serializable{
 		InStream = inStream;
 		
 		CheckMessageFile();
+		new MessageUpdater().start();
 	}
 	
 	public User(String name,File file)
@@ -69,6 +70,15 @@ public class User implements Serializable{
 		messageFile = file;
 	}
 
+	public void Update(InetAddress address, ObjectOutputStream outStream,
+			ObjectInputStream inStream) {
+		
+		InStream = inStream;
+		OutStream = outStream;
+		Address = address;
+		
+		new MessageUpdater().start();
+	}
 	/**
 	 * Class used to update the user with previous messages.
 	 * 
@@ -93,5 +103,5 @@ public class User implements Serializable{
 				e.printStackTrace();
 			}
 		}
-	}
+	}	
 }

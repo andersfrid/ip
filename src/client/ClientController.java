@@ -1,8 +1,5 @@
 package client;
 
-import interfaces.Login;
-import interfaces.iMessage;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -128,7 +125,7 @@ public class ClientController {
 	}
 
 	public void printMessage(UserMessage mess) {
-		if (mess instanceof iMessage) {
+		if (mess instanceof UserMessage) {
 			String author, message;
 			Icon image;
 
@@ -163,7 +160,7 @@ public class ClientController {
 						// Uppdaterar listan i GUIMess..
 						gui.updateCheckBoxes((ArrayList<String>) obj);
 						
-					} else if (obj instanceof iMessage) {
+					} else if (obj instanceof UserMessage) {
 						printMessage((UserMessage) obj);
 					}
 

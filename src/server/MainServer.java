@@ -1,8 +1,5 @@
 package server;
 
-import interfaces.Login;
-import interfaces.iMessage;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -47,6 +44,7 @@ public class MainServer {
 			while (!isInterrupted()) {
 				if(User.InStream == null)
 				{
+					new UpdateClientLists().start();
 					interrupt();
 				}
 				else
@@ -60,11 +58,11 @@ public class MainServer {
 						e1.printStackTrace();
 					}
 					
-					if(obj instanceof iMessage)
+					if(obj instanceof UserMessage)
 					{
 						UserMessage userMessage = (UserMessage)obj;
 						
-						if (userMessage.ToUser() == null) {
+						if (userMessage.ToUser().size() == 0) {
 							try {
 								sendToAll(userMessage);
 								logger.saveAllMessage(userMessage);
@@ -89,6 +87,10 @@ public class MainServer {
 									{
 										logger.saveToMessage(u.Username, userMessage);
 									}
+									else
+									{
+										logger.logError(user);
+									}
 								} 
 								catch (IOException e) {
 									e.printStackTrace();
@@ -112,14 +114,11 @@ public class MainServer {
 		}
 
 		private void sendToAll(UserMessage message) throws IOException {
-			for (User u : userList) {
+			for (User u : userList.getActiveUsers()) {
 				synchronized (u.OutStream) {
 					u.OutStream.writeObject(message);
 					u.OutStream.flush();
 				}
-
-//				logger.logMessage(message.getUsername(), null,
-//						message.getMessage());
 			}
 		}
 	}
@@ -131,6 +130,7 @@ public class MainServer {
 	 */
 	private class ClientListener extends Thread {
 		private Socket socket;
+		private Logger logger = new Logger();
 
 		@Override
 		public void run() {
@@ -148,7 +148,7 @@ public class MainServer {
 					
 					Object obj = inStream.readObject();
 					
-					ArrayList<String> arr = new ArrayList<String>();
+//					ArrayList<String> arr = new ArrayList<String>();
 					if(obj instanceof String){
 //						obj = (String)obj;
 //						System.out.println(obj);
@@ -157,24 +157,28 @@ public class MainServer {
 						
 						if (!userList.exists(newUser)) 
 						{
-							userList.add(newUser);
+							userList.add(newUser);					
 						} 
 						else 
 						{
 							userList.updateUser(newUser);
 						}
 						
-						for(User u : userList)
-						{
-							if(u.OutStream == null)
-							{
-								arr.add(u.Username+":Online");
-							}
-							else 
-							{
-								arr.add(u.Username+":Offline");
-							}
-						}
+						new UpdateClientLists().start();
+						
+						logger.logUser(newUser.Username);
+						
+//						for(User u : userList)
+//						{
+//							if(u.OutStream == null)
+//							{
+//								arr.add(u.Username+":Online");
+//							}
+//							else 
+//							{
+//								arr.add(u.Username+":Offline");
+//							}
+//						}
 						
 //						for(int i = 0; i < 6; i++){
 //							arr.add("HEJ"+i);
@@ -182,15 +186,11 @@ public class MainServer {
 						
 //						arr = userList.getUserList();
 						
-						System.out.println("Skriver ut från server : " + arr);
-						outStream.writeObject(arr);
+						System.out.println("Skriver ut från server : " + userList.getUserList());
+						outStream.writeObject(userList.getUserList());
 						outStream.flush();
 						
 						new MessageHandler(newUser);
-					}
-					if(obj instanceof iMessage)
-					{
-						System.out.print("ANDREAS FEJS!");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -199,12 +199,29 @@ public class MainServer {
 				}
 			}
 		}
-
-		private void updateClientLists(ArrayList<Login> list, User user) throws IOException {
-			synchronized (user.OutStream) {
-				user.OutStream.writeObject(list);
-				user.OutStream.flush();
+	}
+	
+	public class UpdateClientLists extends Thread  
+	{			
+		@Override
+		public void run() {
+			ArrayList<User> activeUsers = userList.getActiveUsers();
+			ArrayList<String> list = userList.getUserList();
+			
+			for(User user : activeUsers)
+			{
+				synchronized (user.OutStream) {
+					try 
+					{
+						user.OutStream.writeObject(list);
+						user.OutStream.flush();
+					} 
+					catch (IOException e) 
+					{
+						e.printStackTrace();
+					}					
+				}
 			}
-		}
+		}			
 	}
 }

@@ -1,7 +1,5 @@
 package server;
 
-import interfaces.iMessage;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -93,9 +91,9 @@ public class Server {
 						oos.writeObject(list);
 					}
 					
-					else if(obj instanceof iMessage){
-						obj = (iMessage)obj;
-						System.out.println("Meddelande från: "+ ((iMessage) obj).getUsername()+ " som skriver: "+((iMessage) obj).getMessage()+" Och det är till: "+((iMessage) obj).ToUser());
+					else if(obj instanceof UserMessage){
+						obj = (UserMessage)obj;
+						System.out.println("Meddelande från: "+ ((UserMessage) obj).getUsername()+ " som skriver: "+((UserMessage) obj).getMessage()+" Och det är till: "+((UserMessage) obj).ToUser());
 					}
 				}
 			}catch(Exception e){}

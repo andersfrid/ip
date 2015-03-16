@@ -1,7 +1,5 @@
 package server;
 
-import interfaces.Login;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -102,9 +100,8 @@ public class UserList implements Serializable,Iterable<User>
 		{
 			if(u.Username.equals(newUser.Username))
 			{
-				u.Address = newUser.Address;
-				u.OutStream = newUser.OutStream;
-			}
+				u.Update(newUser.Address,newUser.OutStream,newUser.InStream);
+			}			
 		}
 	}
 
@@ -113,7 +110,28 @@ public class UserList implements Serializable,Iterable<User>
 		
 		for(User u : list)
 		{
-			returnList.add(u.Username);
+			if(u.OutStream == null)
+			{
+				returnList.add(u.Username+":Online");
+			}
+			else 
+			{
+				returnList.add(u.Username+":Offline");
+			}
+		}
+		
+		return returnList;
+	}
+
+	public ArrayList<User> getActiveUsers() {
+		ArrayList<User> returnList = new ArrayList<User>();
+		
+		for(User u : list)
+		{
+			if(u.OutStream != null)
+			{
+				returnList.add(u);
+			}
 		}
 		
 		return returnList;

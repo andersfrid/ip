@@ -6,9 +6,7 @@ import java.util.LinkedList;
 
 import javax.swing.Icon;
 
-import interfaces.iMessage;
-
-public class Message implements iMessage, Serializable {
+public class Message implements Serializable {
 	private String username;
 	private String message;
 	private Icon image = null; 

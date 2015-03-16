@@ -36,7 +36,7 @@ public class Logger {
 	 * @throws IOException
 	 */
 	public void logUser(String username) throws IOException {
-		log(new Date() + username + " logged in");
+		log(new Date() +" "+ username + " logged in");
 	}
 
 	/**
@@ -81,6 +81,8 @@ public class Logger {
 				saveToUserMessage(userMessage, child);
 			}
 		}
+		
+		logMessage(userMessage.getUsername(), "", userMessage.getMessage());
 	}
 
 	/**
