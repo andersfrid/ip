@@ -228,27 +228,29 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 			resetIcon();
 		}
 		if (e.getSource() == JBSendAll) {
-
+			controller.sendMessage(this.JTFmessage.getText(), getIcon(), null);
+			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
+			resetIcon();
 		}
 		if (e.getSource() == JBLogout) {
-
+			controller.disconnect();
+			System.exit(0);
 		}
 		if (e.getSource() == JBAddFile) {
 			saveIcon();
 		}
 	}
 
-	public void keyTyped(KeyEvent e) {
-	}
+	public void keyTyped(KeyEvent e) {}
 
-	public void keyReleased(KeyEvent e) {
-	}
+	public void keyReleased(KeyEvent e) {}
 
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		if (keyCode == KeyEvent.VK_ENTER) {
-			// showMessage(JTFmessage.getText());
-			System.out.println(JTFmessage.getText());
+			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
+			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
+			resetIcon();
 		}
 	}
 	
