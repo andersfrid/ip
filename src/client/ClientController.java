@@ -161,9 +161,9 @@ public class ClientController {
 					if (obj instanceof ArrayList) {
 						obj = (ArrayList<String>) obj;
 						// Uppdaterar listan i GUIMess..
-						gui.updateCheckBoxes((ArrayList<String>) obj);
-						
-					} else if (obj instanceof iMessage) {
+						gui.updateCheckBoxes((ArrayList<String>) obj);	
+					}
+					else if (obj instanceof iMessage) {
 						printMessage((UserMessage) obj);
 					}
 
