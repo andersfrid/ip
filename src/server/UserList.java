@@ -53,8 +53,8 @@ public class UserList implements Serializable,Iterable<User>
 			}
 		}
 
-		File yourFile = new File("Messages/" + username + ".txt");
-		if (!yourFile.exists()) {
+		File file = new File("Messages/" + username + ".txt");
+		if (!file.exists()) {
 			try {
 				Logger logger = new Logger();
 				logger.logError(username);
@@ -67,7 +67,7 @@ public class UserList implements Serializable,Iterable<User>
 		}
 		else
 		{
-			return new User(username,null,null);
+			return new User(username,file);
 		}	
 	}
 
