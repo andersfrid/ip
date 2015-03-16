@@ -2,6 +2,7 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -12,13 +13,15 @@ public class User implements Serializable{
 	public String Username;
 	public InetAddress Address;
 	public ObjectOutputStream OutStream;
+	public ObjectInputStream InStream;
 	public File messageFile;
 	
-	public User(String name,InetAddress address, ObjectOutputStream stream) throws IOException
+	public User(String name,InetAddress address, ObjectOutputStream outStream,ObjectInputStream inStream) throws IOException
 	{
 		Username = name;
 		Address = address;
-		OutStream = stream;
+		OutStream = outStream;
+		InStream = inStream;
 		
 		CheckMessageFile();
 	}

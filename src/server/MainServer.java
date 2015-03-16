@@ -33,46 +33,70 @@ public class MainServer {
 	 * @author hiplobbe
 	 */
 	private class MessageHandler extends Thread {
-		private UserMessage userMessage;
+		private User User;
 		private Logger logger = new Logger();
 
-		public MessageHandler(iMessage message) {
-			userMessage = (UserMessage) message;
+		public MessageHandler(User u) {
+			User = u;
+			
+			this.start();
 		}
 
 		@Override
 		public void run() {
 			while (!isInterrupted()) {
-				if (userMessage.ToUser().isEmpty()) {
-					try {
-						sendToAll();
-						logger.saveAllMessage(userMessage);
-					} catch (IOException e) {
-						e.printStackTrace();
+				if(User.InStream == null)
+				{
+					interrupt();
+				}
+				else
+				{	
+					Object obj = new Object();
+					try 
+					{
+						obj = User.InStream.readObject();
+					} 
+					catch (ClassNotFoundException | IOException e1) {
+						e1.printStackTrace();
 					}
-				} else if (!userMessage.ToUser().isEmpty()) {
-					ArrayList<String> listOfUsers = userMessage.ToUser();
-
-					for (String user : listOfUsers) {
-						try {
-							User u = userList.findUser(user);
-
-							if (u != null && u.OutStream != null) {
-
-								sendToSpecific(u, userMessage);
-
-								logger.saveToMessage(u.Username, userMessage);
-							} else {
-								logger.saveToMessage(u.Username, userMessage);
+					
+					if(obj instanceof iMessage)
+					{
+						UserMessage userMessage = (UserMessage)obj;
+						
+						if (userMessage.ToUser().isEmpty()) {
+							try {
+								sendToAll(userMessage);
+								logger.saveAllMessage(userMessage);
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} 
+						else if (!userMessage.ToUser().isEmpty()) {
+							ArrayList<String> listOfUsers = userMessage.ToUser();
+		
+							for (String user : listOfUsers) {
+								try {
+									User u = userList.findUser(user);
+		
+									if (u != null && u.OutStream != null) {
+		
+										sendToSpecific(u, userMessage);
+		
+										logger.saveToMessage(u.Username, userMessage);
+									} 
+									else if(u != null)
+									{
+										logger.saveToMessage(u.Username, userMessage);
+									}
+								} 
+								catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
 						}
 					}
 				}
-
-				interrupt();
 			}
 		}
 
@@ -83,19 +107,19 @@ public class MainServer {
 				to.OutStream.flush();
 			}
 
-			logger.logMessage(userMessage.getUsername(), to.Username,
-					userMessage.getMessage());
+			logger.logMessage(message.getUsername(), to.Username,
+					message.getMessage());
 		}
 
-		private void sendToAll() throws IOException {
+		private void sendToAll(UserMessage message) throws IOException {
 			for (User u : userList) {
 				synchronized (u.OutStream) {
-					u.OutStream.writeObject(userMessage);
+					u.OutStream.writeObject(message);
 					u.OutStream.flush();
 				}
 
-				logger.logMessage(userMessage.getUsername(), null,
-						userMessage.getMessage());
+//				logger.logMessage(message.getUsername(), null,
+//						message.getMessage());
 			}
 		}
 	}
@@ -130,7 +154,7 @@ public class MainServer {
 //						System.out.println(obj);
 						
 						User newUser = new User((String)obj,
-								socket.getInetAddress(), outStream);
+								socket.getInetAddress(), outStream,inStream);
 						
 						if (!userList.exists(newUser)) 
 						{
@@ -143,7 +167,14 @@ public class MainServer {
 						
 						for(User u : userList)
 						{
-							arr.add(u.Username);
+							if(u.OutStream == null)
+							{
+								arr.add(u.Username+":Online");
+							}
+							else 
+							{
+								arr.add(u.Username+":Offline");
+							}
 						}
 						
 //						for(int i = 0; i < 6; i++){
@@ -155,29 +186,13 @@ public class MainServer {
 						System.out.println("Skriver ut från server : " + arr);
 						outStream.writeObject(arr);
 						outStream.flush();
+						
+						new MessageHandler(newUser);
 					}
-					
-					/*
-					if (obj instanceof Login) {
-						Login log = (Login) obj;
-						User newUser = new User(log.getUsername(),
-								socket.getInetAddress(), outStream);
-
-						if (!userList.exists(newUser)) {
-							userList.add(newUser);
-						} else {
-							// TODO Check so user isn't online already, to
-							// counter "username stealing".
-							userList.updateUser(newUser);
-						}
-
-						updateClientLists(userList.getUserList(), newUser);
-					} else if (obj instanceof iMessage) {
-						MessageHandler handler = new MessageHandler((iMessage) obj);
-						handler.start();
+					if(obj instanceof iMessage)
+					{
+						System.out.print("ANDREAS FEJS!");
 					}
-					
-					*/
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
