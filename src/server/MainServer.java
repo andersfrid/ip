@@ -18,7 +18,7 @@ public class MainServer {
 	private UserList userList = new UserList();
 
 	public MainServer() throws IOException {
-		connSocket = new ServerSocket(outPort, 0, InetAddress.getByName(null));
+		connSocket = new ServerSocket(outPort);
 		listener.start();
 	}
 
@@ -153,8 +153,7 @@ public class MainServer {
 //						obj = (String)obj;
 //						System.out.println(obj);
 						
-						User newUser = new User((String)obj,
-								socket.getInetAddress(), outStream,inStream);
+						User newUser = new User((String)obj, socket.getInetAddress(), outStream,inStream);
 						
 						if (!userList.exists(newUser)) 
 						{
