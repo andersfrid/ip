@@ -99,8 +99,8 @@ public class ClientController {
 		gui = new GUIMess(this);
 		printMessage(new UserMessage("Kuckelemuu", "Hej jag heter kuckelemuuu", null));
 		printMessage(new UserMessage("Andreas", "Hej jag heter Andreas", null));
-		printMessage(new UserMessage("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Andreas/Desktop/amazing_horse.png")));
-		printMessage(new UserMessage("Per", "Hej jag heter Per", new ImageIcon("/Users/Andreas/Desktop/IMG_0027 3.JPG")));
+//		printMessage(new UserMessage("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Andreas/Desktop/amazing_horse.png")));
+//		printMessage(new UserMessage("Per", "Hej jag heter Per", new ImageIcon("/Users/Andreas/Desktop/IMG_0027 3.JPG")));
 		
 	}
 
@@ -110,11 +110,12 @@ public class ClientController {
 
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.size(); i++) {
-				newMess.setTo(toUsers.get(i));
+				String toUser = toUsers.get(i);
+				toUser = toUser.substring(0,toUser.indexOf(':'));
+				newMess.setTo(toUser);
+				System.out.println(toUser);
 			}
 		}
-
-		System.out.println("kommer skickas till" + toUsers);
 
 		try {
 			oos.writeObject(newMess);

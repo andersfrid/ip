@@ -13,7 +13,7 @@ public class UserMessage implements iMessage,Serializable{
 	private String TextMessage;
 	private Icon Image;
 //	private boolean IsPublic;
-	private ArrayList<String> ToUser;
+	private ArrayList<String> ToUser = new ArrayList<String>();
 	
 	public UserMessage(String username, String message, Icon image){
 		this.Username = username;
@@ -38,7 +38,7 @@ public class UserMessage implements iMessage,Serializable{
 
 	@Override
 	public void setMessage(String message) {
-
+		this.TextMessage = message;
 	}
 
 	@Override
@@ -48,13 +48,12 @@ public class UserMessage implements iMessage,Serializable{
 
 	@Override
 	public void setImage(Icon image) {
-		
+		this.Image = image;
 	}
 
 	@Override
 	public void setTo(String username) {
-		// TODO Auto-generated method stub
-		
+		this.ToUser.add(username);
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class MainServer {
 					{
 						UserMessage userMessage = (UserMessage)obj;
 						
-						if (userMessage.ToUser().isEmpty()) {
+						if (userMessage.ToUser() == null) {
 							try {
 								sendToAll(userMessage);
 								logger.saveAllMessage(userMessage);
@@ -72,7 +72,7 @@ public class MainServer {
 								e.printStackTrace();
 							}
 						} 
-						else if (!userMessage.ToUser().isEmpty()) {
+						else if (userMessage.ToUser() != null) {
 							ArrayList<String> listOfUsers = userMessage.ToUser();
 		
 							for (String user : listOfUsers) {

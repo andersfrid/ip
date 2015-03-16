@@ -200,9 +200,11 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public Icon getIcon(){
-		Icon icon = this.sendIcon;
-		sendIcon = null;
-		return icon;
+		return sendIcon;
+	}
+	
+	public void resetIcon(){
+		this.sendIcon = null;
 	}
 	
 	public void saveIcon(){
@@ -221,8 +223,9 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
-			controller.sendMessage(this.JTFmessage.getText(), null, controllCheckedBoxes());
+			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
 			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
+			resetIcon();
 		}
 		if (e.getSource() == JBSendAll) {
 
