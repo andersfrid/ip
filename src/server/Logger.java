@@ -151,11 +151,16 @@ public class Logger {
 
 			while (bReader.read() != -1) {
 				String s = bReader.readLine();
-				messages.add(s);
-				count++;
-
-				if (count > 10) {
-					break;
+				
+				if(!messages.contains(s))
+				{
+					messages.add(s);
+				
+					count++;
+	
+					if (count > 10) {
+						break;
+					}
 				}
 			}
 		}

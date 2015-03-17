@@ -42,9 +42,9 @@ public class MainServer {
 		@Override
 		public void run() {
 			while (!isInterrupted()) {
-				if(User.InStream == null)
+				if(User.InStream == null || User.OutStream == null)
 				{
-					new UpdateClientLists().start();
+					new UpdateClientLists().start();				
 					this.interrupt();
 				}
 				else
