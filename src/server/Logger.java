@@ -96,11 +96,11 @@ public class Logger {
 	 *            The message to be saved
 	 * @param file
 	 *            The file to save to.
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
 	private void saveToUserMessage(UserMessage userMessage, File file)
-			throws FileNotFoundException {
-		PrintWriter out = new PrintWriter(file);
+			throws IOException {
+		PrintWriter out =  new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
 
 		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
 		
