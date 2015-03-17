@@ -57,6 +57,11 @@ public class MainServer {
 					catch (ClassNotFoundException | IOException e1) {
 						e1.printStackTrace();
 					}
+					catch(EOFException ex)
+					{
+						ex.printStackTrace();
+						interrupt();
+					}
 					
 					if(obj instanceof UserMessage)
 					{
@@ -91,7 +96,6 @@ public class MainServer {
 									else
 									{
 										logger.logError(user);
-										new UpdateClientLists().start();
 									}
 								} 
 								catch (IOException e) {
