@@ -40,8 +40,8 @@ public class ClientController {
 	public void setUser(String username) {
 		this.username = username;
 	}
-	
-	public String getUser(){
+
+	public String getUser() {
 		return username;
 	}
 
@@ -64,42 +64,8 @@ public class ClientController {
 	}
 
 	public void startGUIMess() {
-		try {
-			oos.writeObject(this.username);
-			oos.flush();
-
-		} catch (Exception e) {
-			System.err.println("Kan inte skicka användarnamn till Server!");
-		}
-
-		try {
-			System.out.println("första i try");
-			Object obj = ois.readObject();
-
-			if (obj instanceof ArrayList) {
-				System.out.println("är en ArrayList!");
-				obj = (ArrayList<String>) obj;
-				System.out.println(obj);
-
-				usersOnServer = (ArrayList<String>) obj;
-				System.out.println("Får något!");
-				usersOnServer.toString();
-
-				listener = new Listener();
-
-			}
-			
-		} catch (Exception e) {
-			System.err.println("Kan inte få tillbaka en lista");
-			System.err.println(e);
-		}
-
 		gui = new GUIMess(this);
-		printMessage(new UserMessage("Kuckelemuu", "Hej jag heter kuckelemuuu", null));
-		printMessage(new UserMessage("Andreas", "Hej jag heter Andreas", null));
-//		printMessage(new UserMessage("Pelle", "Hej jag heter Pelle", new ImageIcon("/Users/Andreas/Desktop/amazing_horse.png")));
-//		printMessage(new UserMessage("Per", "Hej jag heter Per", new ImageIcon("/Users/Andreas/Desktop/IMG_0027 3.JPG")));
-		
+		listener = new Listener();
 	}
 
 	public void sendMessage(String mess, Icon image, ArrayList<String> toUsers) {
@@ -109,7 +75,7 @@ public class ClientController {
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.size(); i++) {
 				String toUser = toUsers.get(i);
-				toUser = toUser.substring(0,toUser.indexOf(':'));
+				toUser = toUser.substring(0, toUser.indexOf(':'));
 				newMess.setTo(toUser);
 				System.out.println(toUser);
 			}
@@ -153,26 +119,42 @@ public class ClientController {
 
 		public void run() {
 			try {
+				try {
+					oos.writeObject(username);
+					oos.flush();
+				} catch (Exception e) {
+					System.err.println("Kan inte skicka användarnamn till Server!");
+				}
+				
 				while (true) {
-					
+
 					Object obj = ois.readObject();
 
 					if (obj instanceof ArrayList<?>) {
-						//obj = (ArrayList<String>) obj;
-						// Uppdaterar listan i GUIMess..
-//						gui.updateCheckBoxes((ArrayList<String>) obj);	
+						obj = (ArrayList<String>) obj;
+						// Någon loggar in
+						usersOnServer = (ArrayList<String>) obj;
+						gui.updateCheckBoxes();
 						System.out.println("här kommer jag inte in?");
-						
 					}
-					
+
 					if (obj instanceof UserMessage) {
-						System.out.println("hejhopppppp");
 						printMessage((UserMessage) obj);
-						System.out.println(((UserMessage) obj).getUsername()+"hehehhehehehe");
+					}
+
+					if (obj instanceof LinkedList<?>) {
+						for (UserMessage message : (LinkedList<UserMessage>) obj) {
+							printMessage(message);
+						}
 					}
 
 				}
 			} catch (IOException | ClassNotFoundException e) {
+				try {
+					ois.close();
+					socket.close();
+				} catch (Exception e1) {
+				}
 			}
 		}
 	}
