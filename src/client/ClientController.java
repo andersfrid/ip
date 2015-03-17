@@ -52,7 +52,7 @@ public class ClientController {
 	public void connect() {
 		try {
 			socket = new Socket(this.ip, this.port);
-			socket.setSoTimeout(5000);
+			socket.setSoTimeout(999999);
 			System.out.println(socket.toString());
 			ois = new ObjectInputStream(socket.getInputStream());
 			oos = new ObjectOutputStream(socket.getOutputStream());
@@ -160,15 +160,9 @@ public class ClientController {
 					if (obj instanceof ArrayList<?>) {
 						//obj = (ArrayList<String>) obj;
 						// Uppdaterar listan i GUIMess..
-						gui.updateCheckBoxes((ArrayList<String>) obj);	
+//						gui.updateCheckBoxes((ArrayList<String>) obj);	
 						System.out.println("här kommer jag inte in?");
 						
-					}
-					if (obj instanceof LinkedList<?>) {
-						for(UserMessage message : (LinkedList<UserMessage>)obj)
-						{
-							printMessage(message);
-						}
 					}
 					
 					if (obj instanceof UserMessage) {
@@ -183,9 +177,9 @@ public class ClientController {
 		}
 	}
 
-//	public static void main(String[] args) {
-//		new ClientGUI(new ClientController("127.0.0.1", 3520));
-//	}
+	public static void main(String[] args) {
+		new ClientGUI(new ClientController("127.0.0.1", 3520));
+	}
 
 	public void disconnect() {
 		try {
