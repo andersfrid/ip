@@ -27,7 +27,7 @@ public class User implements Serializable{
 		InStream = inStream;
 		
 		CheckMessageFile();
-		new MessageUpdater().start();
+//		new MessageUpdater().start();
 	}
 	
 	public User(String name,File file)
@@ -55,16 +55,6 @@ public class User implements Serializable{
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else if(OutStream != null)
-		{
-			try {
-				MessageUpdater update = new MessageUpdater();
-				update.start();
-			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

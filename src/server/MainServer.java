@@ -169,10 +169,10 @@ public class MainServer {
 						logger.logUser(newUser.Username);
 						
 //						System.out.println("Skriver ut från server : " + userList.getUserList());
-						synchronized (outStream) {
-							outStream.writeObject(userList.getUserList());
-							outStream.flush();
-						}				
+//						synchronized (outStream) {
+//							outStream.writeObject(userList.getUserList());
+//							outStream.flush();
+//						}				
 						
 						new MessageHandler(newUser);
 					}
