@@ -56,10 +56,6 @@ public class MainServer {
 					} 
 					catch (ClassNotFoundException | IOException e1) {
 						e1.printStackTrace();
-					}
-					catch(EOFException ex)
-					{
-						ex.printStackTrace();
 						interrupt();
 					}
 					
