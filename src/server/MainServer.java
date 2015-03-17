@@ -45,7 +45,7 @@ public class MainServer {
 				if(User.InStream == null)
 				{
 					new UpdateClientLists().start();
-					interrupt();
+					this.interrupt();
 				}
 				else
 				{	
@@ -56,7 +56,7 @@ public class MainServer {
 					} 
 					catch (ClassNotFoundException | IOException e1) {
 						e1.printStackTrace();
-						interrupt();
+						this.interrupt();
 					}
 					
 					if(obj instanceof UserMessage)
