@@ -91,6 +91,7 @@ public class MainServer {
 									else
 									{
 										logger.logError(user);
+										new UpdateClientLists().start();
 									}
 								} 
 								catch (IOException e) {
