@@ -21,7 +21,7 @@ public class MainServer {
 
 	public static void main(String[] args) throws IOException {
 		new MainServer();
-		//new ClientGUI(new ClientController("127.0.0.1", 3520));
+		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
 	/**
@@ -168,8 +168,10 @@ public class MainServer {
 						logger.logUser(newUser.Username);
 						
 //						System.out.println("Skriver ut från server : " + userList.getUserList());
-						outStream.writeObject(userList.getUserList());
-						outStream.flush();
+						synchronized (outStream) {
+							outStream.writeObject(userList.getUserList());
+							outStream.flush();
+						}				
 						
 						new MessageHandler(newUser);
 					}

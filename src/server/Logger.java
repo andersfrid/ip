@@ -18,7 +18,7 @@ public class Logger {
 			file.createNewFile();
 		}
 
-		PrintWriter out = new PrintWriter(file);
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
 
 		synchronized (out) {
 			out.println(logMessage);
