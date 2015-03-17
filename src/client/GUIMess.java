@@ -37,16 +37,16 @@ import javax.swing.JToggleButton;
 
 import com.sun.jmx.snmp.Timestamp;
 
-public class GUIMess extends JPanel implements ActionListener, KeyListener {
+public class GUIMess extends JPanel implements ActionListener {
 	private ClientController controller;
 	private Icon sendIcon = null;
-	
+
 	private JFileChooser jChooser = new JFileChooser();
 	private Calendar calendar;
 
-	JCheckBox[] toUsers;
+	private JCheckBox[] toUsers;
 
-	private JLabel userslabel, iconLabel, iconAuthor,lastIcon;
+	private JLabel userslabel, iconLabel, iconAuthor, lastIcon;
 	private JTextField JTFmessage = new JTextField();
 	private JButton JBSend = new JButton("Send");
 	private JButton JBLogout = new JButton("Logout");
@@ -65,8 +65,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 
 		this.controller = controller;
 
-		
-		//IconPanel
+		// IconPanel
 		IconPanel = new JPanel(new BorderLayout());
 		IconPanel.setPreferredSize(new Dimension(200, 200));
 		iconLabel = new JLabel("Senaste skickade bild");
@@ -78,10 +77,7 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		IconPanel.add(iconLabel, BorderLayout.NORTH);
 		IconPanel.add(lastIcon, BorderLayout.CENTER);
 		IconPanel.add(iconAuthor, BorderLayout.SOUTH);
-		
-		
-		
-		
+
 		// CENTER
 		scrollPane = new JScrollPane(showMess);
 		JPCenter = new JPanel();
@@ -100,7 +96,6 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		JPEast.add(userslabel);
 
 		// Lägga till användare
-		generateCheckBoxes(controller.getListOnUsers());
 
 		// South
 		JPSouth = new JPanel();
@@ -126,7 +121,6 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		JBSendAll.addActionListener(this);
 		JBLogout.addActionListener(this);
 		JBAddFile.addActionListener(this);
-		JTFmessage.addKeyListener(this);
 
 		// Frame
 		frame = new JFrame();
@@ -139,98 +133,83 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		frame.pack();
 	}
 
+	public void generateCheckBoxes() {
+		ArrayList<String> users = controller.getListOnUsers();
+		toUsers = new JCheckBox[users.size()];
+		for (int i = 0; i < users.size(); i++) {
+			toUsers[i] = new JCheckBox(users.get(i));
+			JPEast.add(toUsers[i]);
+		}
+	}
+
+	public void updateCheckBoxes() {
+		if (toUsers != null) {
+			for (int i = 0; i < toUsers.length; i++) {
+				toUsers[i].remove(this);
+			}
+			JPEast.removeAll();
+		}
+		generateCheckBoxes();
+		JPEast.revalidate();
+		JPEast.repaint();
+	}
+
 	public void writeMessage(String author, String message, Icon image) {
 		calendar = Calendar.getInstance();
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		String output = dateFormat.format(calendar.getTime())+" "+author + ": " + message;
+		String output = dateFormat.format(calendar.getTime()) + " " + author
+				+ ": " + message;
 
 		if (image != null) {
 			lastIcon.setIcon(image);
 			lastIcon.repaint();
-			iconAuthor.setText("Avsändare: "+author+" ("+dateFormat.format(calendar.getTime())+")");
+			iconAuthor.setText("Avsändare: " + author + " ("
+					+ dateFormat.format(calendar.getTime()) + ")");
 			iconAuthor.repaint();
-			
+
 			output += "  | (Bifogad bild)";
-			//Föröska fixa det här imorgon!!!!!!
 		}
-		
+
 		output += "\n";
-		
+
 		showMess.setFont(mess);
 		showMess.append(output);
 
 	}
 
-	public void generateCheckBoxes(ArrayList<String> users) {
-		
-		
-		
-		toUsers = new JCheckBox[users.size()-1];
-		for (int i = 0; i < users.size()-1; i++) {
-			String user = users.get(i);
-	
-			if (!(user.substring(0,user.indexOf(':')).equals(controller.getUser()))) {
-				toUsers[i] = new JCheckBox(users.get(i));
-				JPEast.add(toUsers[i]);
-			}
-		}
-	}
-
-	public void updateCheckBoxes(ArrayList<String> users) {
-
-//		for (int i = 0; i < toUsers.length; i++) {
-//			toUsers[i].remove(this);
-//		}
-		toUsers = null;
-
-		generateCheckBoxes(users);
-	}
-
-	public ArrayList<String> controllCheckedBoxes() {
-
-		ArrayList<String> isSelected = new ArrayList<String>();
-
-		for (int i = 0; i < toUsers.length; i++) {
-			if (toUsers[i].isSelected()) {
-				isSelected.add(toUsers[i].getText());
-			}
-		}
-
-		return isSelected;
-	}
-
-	public Icon getIcon(){
+	public Icon getIcon() {
 		return sendIcon;
 	}
-	
-	public void resetIcon(){
+
+	public void resetIcon() {
 		this.sendIcon = null;
 	}
-	
-	public void saveIcon(){
+
+	public void saveIcon() {
 		File file;
 		BufferedImage img;
 		jChooser.showOpenDialog(null);
 		file = jChooser.getSelectedFile();
-		
-		try{
-			img=ImageIO.read(file);
+
+		try {
+			img = ImageIO.read(file);
 			sendIcon = new ImageIcon(img);
+		} catch (Exception e) {
 		}
-		catch(Exception e){}
-		
+
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
-			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
-			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
+			// controller.sendMessage(this.JTFmessage.getText(), getIcon(),
+			// controllCheckedBoxes());
 			resetIcon();
+
 		}
 		if (e.getSource() == JBSendAll) {
 			controller.sendMessage(this.JTFmessage.getText(), getIcon(), null);
-			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
 			resetIcon();
+
 		}
 		if (e.getSource() == JBLogout) {
 			controller.disconnect();
@@ -241,17 +220,4 @@ public class GUIMess extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
-	public void keyTyped(KeyEvent e) {}
-
-	public void keyReleased(KeyEvent e) {}
-
-	public void keyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		if (keyCode == KeyEvent.VK_ENTER) {
-			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
-			writeMessage(controller.getUser(),JTFmessage.getText(),getIcon());
-			resetIcon();
-		}
-	}
-	
 }
