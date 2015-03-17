@@ -51,22 +51,7 @@ public class UserList implements Serializable,Iterable<User>
 			}
 		}
 
-		File file = new File("Messages/" + username + ".txt");
-		if (!file.exists()) {
-			try {
-				Logger logger = new Logger();
-				logger.logError(username);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-		else
-		{
-			return new User(username,file);
-		}	
+		return null;
 	}
 
 	public void add(User user) {
