@@ -157,13 +157,11 @@ public class GUIMess extends JPanel implements ActionListener {
 	public ArrayList<String> controllCheckedBoxes() {
 
 		ArrayList<String> isSelected = new ArrayList<String>();
-
 		for (int i = 0; i < toUsers.length; i++) {
 			if (toUsers[i].isSelected()) {
 				isSelected.add(toUsers[i].getText());
 			}
 		}
-
 		return isSelected;
 	}
 

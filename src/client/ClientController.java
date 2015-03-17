@@ -79,11 +79,13 @@ public class ClientController {
 				newMess.setTo(toUser);
 				System.out.println(toUser);
 			}
+			newMess.setTo(username);
 		}
 
 		try {
 			oos.writeObject(newMess);
 			oos.flush();
+			System.out.println(newMess.ToUser());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,6 +146,7 @@ public class ClientController {
 
 					if (obj instanceof LinkedList<?>) {
 						for (UserMessage message : (LinkedList<UserMessage>) obj) {
+							System.out.println(message.getMessage());
 							printMessage(message);
 						}
 					}
@@ -160,7 +163,7 @@ public class ClientController {
 	}
 
 	public static void main(String[] args) {
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
+		new ClientGUI(new ClientController("193.14.131.134", 3520));
 	}
 
 	public void disconnect() {
