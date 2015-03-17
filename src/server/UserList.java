@@ -46,7 +46,7 @@ public class UserList implements Serializable,Iterable<User>
 	
 	public User findUser(String username) throws IOException {
 		for (User u : list) {
-			if (u.Username == username) {
+			if (u.Username.equals(username)) {
 				return u;
 			}
 		}
