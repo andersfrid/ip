@@ -124,7 +124,7 @@ public class GUIMess extends JPanel implements ActionListener {
 
 		// Frame
 		frame = new JFrame();
-		frame.setPreferredSize(new Dimension(850, 400));
+		frame.setPreferredSize(new Dimension(900, 400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.add(JPCenter, BorderLayout.CENTER);
@@ -152,6 +152,19 @@ public class GUIMess extends JPanel implements ActionListener {
 		generateCheckBoxes();
 		JPEast.revalidate();
 		JPEast.repaint();
+	}
+	
+	public ArrayList<String> controllCheckedBoxes() {
+
+		ArrayList<String> isSelected = new ArrayList<String>();
+
+		for (int i = 0; i < toUsers.length; i++) {
+			if (toUsers[i].isSelected()) {
+				isSelected.add(toUsers[i].getText());
+			}
+		}
+
+		return isSelected;
 	}
 
 	public void writeMessage(String author, String message, Icon image) {
@@ -201,8 +214,7 @@ public class GUIMess extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
-			// controller.sendMessage(this.JTFmessage.getText(), getIcon(),
-			// controllCheckedBoxes());
+			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
 			resetIcon();
 
 		}
