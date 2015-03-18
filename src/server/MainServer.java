@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.BrokenBarrierException;
 
 import client.ClientController;
 import client.ClientGUI;
@@ -115,11 +116,19 @@ public class MainServer {
 					message.getMessage());
 		}
 
-		private void sendToAll(UserMessage message) throws IOException {
+		private void sendToAll(UserMessage message){
 			for (User u : userList.getActiveUsers()) {
 				synchronized (u.OutStream) {
-					u.OutStream.writeObject(message);
-					u.OutStream.flush();
+					try {
+						u.OutStream.writeObject(message);
+						u.OutStream.flush();
+					} 					
+					catch (IOException e)
+					{
+						e.printStackTrace();
+						u.OutStream = null;
+						u.InStream = null;
+					}
 				}
 			}
 		}
