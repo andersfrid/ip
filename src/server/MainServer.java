@@ -212,7 +212,11 @@ public class MainServer {
 			}
 		}
 	}
-	
+	/**
+	 * Thread to update all the clients with new info of all the clients.
+	 * 
+	 * @author Hiplobbe
+	 */
 	public class UpdateClientLists extends Thread  
 	{			
 		@Override
