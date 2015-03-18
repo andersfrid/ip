@@ -174,7 +174,7 @@ public class ClientController {
 	}
 	// Main metoden som startar clienten, Här skriver du i ip adressen som han som startat servern har.
 	public static void main(String[] args) {
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
+		new ClientGUI(new ClientController("10.1.12.79", 3520));
 	}
 
 }

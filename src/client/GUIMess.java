@@ -225,11 +225,13 @@ public class GUIMess extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
 			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());
+			JTFmessage.setText("");
 			resetIcon();
 
 		}
 		if (e.getSource() == JBSendAll) {
 			controller.sendMessage(this.JTFmessage.getText(), getIcon(), null);
+			JTFmessage.setText("");
 			resetIcon();
 
 		}
