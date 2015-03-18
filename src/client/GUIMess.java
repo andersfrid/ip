@@ -7,25 +7,19 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import javafx.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,10 +27,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 
-import com.sun.jmx.snmp.Timestamp;
-
+/**
+ * Gui klass till användadet av chat funktionen
+ * @author David Beer, Andreas Appelqvist
+ *
+ */
 public class GUIMess extends JPanel implements ActionListener {
 	private ClientController controller;
 	private Icon sendIcon = null;
@@ -52,7 +48,6 @@ public class GUIMess extends JPanel implements ActionListener {
 	private JButton JBLogout = new JButton("Logout");
 	private JButton JBAddFile = new JButton("Add File");
 	private JButton JBSendAll = new JButton("Send all");
-	private JToggleButton dav, and, ande, joa, joh;
 	private JTextArea showMess = new JTextArea();
 	private Font font1 = new Font("SansSerif", Font.BOLD, 13);
 	private Font font2 = new Font("SansSerif", Font.PLAIN, 12);
@@ -60,7 +55,10 @@ public class GUIMess extends JPanel implements ActionListener {
 	private JPanel JPCenter, JPEast, JPSouth, IconPanel;
 	private JFrame frame;
 	private JScrollPane scrollPane;
-
+/**
+ * Konstruktor som tar emot en controller och ritar upp allt i GUI.
+ * @param controller 
+ */
 	public GUIMess(ClientController controller) {
 
 		this.controller = controller;
@@ -132,7 +130,9 @@ public class GUIMess extends JPanel implements ActionListener {
 		frame.add(JPSouth, BorderLayout.SOUTH);
 		frame.pack();
 	}
-
+/**
+ * Skapar checkboxes i högra panelen.
+ */
 	public void generateCheckBoxes() {
 		ArrayList<String> users = controller.getListOnUsers();
 		toUsers = new JCheckBox[users.size()];
@@ -141,7 +141,9 @@ public class GUIMess extends JPanel implements ActionListener {
 			JPEast.add(toUsers[i]);
 		}
 	}
-
+/**
+ * Uppdaterar checkboxes när någon loggar in eller ut
+ */
 	public void updateCheckBoxes() {
 		if (toUsers != null) {
 			for (int i = 0; i < toUsers.length; i++) {
@@ -153,7 +155,10 @@ public class GUIMess extends JPanel implements ActionListener {
 		JPEast.revalidate();
 		JPEast.repaint();
 	}
-	
+/**
+ * Kontrollerar vilka som är valda i checkboxes
+ * @return isSelected vem som är valda
+ */
 	public ArrayList<String> controllCheckedBoxes() {
 
 		ArrayList<String> isSelected = new ArrayList<String>();
@@ -164,7 +169,12 @@ public class GUIMess extends JPanel implements ActionListener {
 		}
 		return isSelected;
 	}
-
+/**
+ * Metod som fromaterar och skriver ut medelande.
+ * @param author användaren som skickar medelandet
+ * @param message medelandet som skickas
+ * @param image bliden som skickas
+ */
 	public void writeMessage(String author, String message, Icon image) {
 		calendar = Calendar.getInstance();
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -187,15 +197,15 @@ public class GUIMess extends JPanel implements ActionListener {
 		showMess.append(output);
 
 	}
-
+//
 	public Icon getIcon() {
 		return sendIcon;
 	}
-
+//
 	public void resetIcon() {
 		this.sendIcon = null;
 	}
-
+//Används för att välja bild som man vill skicka.
 	public void saveIcon() {
 		File file;
 		BufferedImage img;
@@ -209,7 +219,9 @@ public class GUIMess extends JPanel implements ActionListener {
 		}
 
 	}
-
+/**
+ * Ger knappar funktionalitet
+ */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == JBSend) {
 			controller.sendMessage(this.JTFmessage.getText(), getIcon(), controllCheckedBoxes());

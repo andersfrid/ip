@@ -1,11 +1,10 @@
 package client;
 
-import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,24 +12,27 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Inloggnings GUI för användaren.
+ * @author Joakim Gustavsson Sköld
+ *
+ */
 public class ClientGUI extends JPanel implements ActionListener {
 
 	private JFrame frame = new JFrame("Client");
-
 	private JLabel lblClientname = new JLabel("Clientserver - IP");
 	private JLabel lblUsername = new JLabel("Username:");
-	// private JLabel lblPort = new JLabel("Port:");
-
 	private JButton btnConnect = new JButton("Connect");
 	private JButton btnClose = new JButton("Close");
-
 	private JTextField tfUsername = new JTextField("");
-
 	private Font plainSS18 = new Font("SansSerif", Font.PLAIN, 18);
 	private Font boldSS28 = new Font("SansSerif", Font.BOLD, 28);
-
 	private ClientController controller;
 
+	/**
+	 * Konstruktor som bygger upp GUI.
+	 * @param controller
+	 */
 	public ClientGUI(ClientController controller) {
 		this.controller = controller;
 
@@ -66,32 +68,17 @@ public class ClientGUI extends JPanel implements ActionListener {
 		btnClose.addActionListener(this);
 
 	}
-
+	/**
+	 * Metod som ger knapparna funktionallitet.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnConnect) {
 			controller.setUser(tfUsername.getText());
 			controller.startGUIMess();
 			frame.setVisible(false);
 		}
-
-		else if (e.getSource() == btnClose) {
+		if (e.getSource() == btnClose) {
 			System.exit(0);
 		}
 	}
-	
-	public void keyTyped(KeyEvent e) {
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-	public void keyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		if (keyCode == KeyEvent.VK_ENTER) {
-			controller.setUser(tfUsername.getText());
-			controller.startGUIMess();
-			frame.setVisible(false);
-		}
-	}
-
 }
