@@ -163,7 +163,7 @@ public class Logger {
 				int ex = list.size()-10;
 				for(int i = list.size()-1;i>ex;i--)
 				{
-					messages.add(list.get(i));
+					messages(0,list.get(i));
 				}
 			}
 		}
