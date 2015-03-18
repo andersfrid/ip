@@ -18,6 +18,7 @@ public class MainServer {
 	public MainServer() throws IOException {
 		connSocket = new ServerSocket(outPort);
 		listener.start();
+		new UpdateClientLists().start();
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -45,7 +46,7 @@ public class MainServer {
 			while (!isInterrupted()) {
 				if(User.InStream == null || User.OutStream == null)
 				{
-					new UpdateClientLists().start();				
+//					new UpdateClientLists().start();				
 					this.interrupt();
 				}
 				else
@@ -57,7 +58,6 @@ public class MainServer {
 					} 
 					catch (ClassNotFoundException | IOException e1) {
 						e1.printStackTrace();
-						new UpdateClientLists();
 						this.interrupt();
 					}
 					
@@ -98,6 +98,8 @@ public class MainServer {
 								} 
 								catch (IOException e) {
 									e.printStackTrace();
+//									new UpdateClientLists().start();				
+									this.interrupt();
 								}
 							}
 						}
@@ -127,8 +129,7 @@ public class MainServer {
 					catch (IOException e)
 					{
 						e.printStackTrace();
-						u.OutStream = null;
-						u.InStream = null;
+						u.Update(u.Address, null, null);
 					}
 				}
 			}
@@ -174,7 +175,7 @@ public class MainServer {
 							userList.updateUser(newUser);
 						}
 						
-						new UpdateClientLists().start();
+//						new UpdateClientLists().start();
 						
 						logger.logUser(newUser.Username);
 						
@@ -199,21 +200,30 @@ public class MainServer {
 	{			
 		@Override
 		public void run() {
-			ArrayList<User> activeUsers = userList.getActiveUsers();
-			ArrayList<String> list = userList.getUserList();
-			
-			for(User user : activeUsers)
+			while(!interrupted())
 			{
-				synchronized (user.OutStream) {
-					try 
-					{
-						user.OutStream.writeObject(list);
-						user.OutStream.flush();
-					} 
-					catch (IOException e) 
-					{
-						e.printStackTrace();
-					}					
+				ArrayList<User> activeUsers = userList.getActiveUsers();
+				ArrayList<String> list = userList.getUserList();
+				
+				for(User user : activeUsers)
+				{
+					synchronized (user.OutStream) {
+						try 
+						{
+							user.OutStream.writeObject(list);
+							user.OutStream.flush();
+						} 
+						catch (IOException e) 
+						{
+							e.printStackTrace();
+						}					
+					}
+				}
+				try {
+					this.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}			
