@@ -177,6 +177,7 @@ public class MainServer {
 						
 //						new UpdateClientLists().start();
 						
+						miniClientUpdate();
 						logger.logUser(newUser.Username);
 						
 //						System.out.println("Skriver ut frÃ¥n server : " + userList.getUserList());
@@ -191,6 +192,27 @@ public class MainServer {
 					e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void miniClientUpdate()
+		{
+			ArrayList<User> activeUsers = userList.getActiveUsers();
+			ArrayList<String> list = userList.getUserList();
+			
+			for(User user : activeUsers)
+			{
+				synchronized (user.OutStream) {
+					try 
+					{
+						user.OutStream.writeObject(list);
+						user.OutStream.flush();
+					} 
+					catch (IOException e) 
+					{
+						e.printStackTrace();
+					}					
 				}
 			}
 		}
