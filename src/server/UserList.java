@@ -16,7 +16,9 @@ public class UserList implements Serializable,Iterable<User>
 	{
 		fillUserList();
 	}
-	
+	/**
+	 * Fills the user list with offline users.
+	 */
 	private void fillUserList() {
 		File dir = new File("Messages");
 
@@ -39,12 +41,22 @@ public class UserList implements Serializable,Iterable<User>
 			}
 		}
 	}
-	
+	/**
+	 * Returns number of items in the list.
+	 * 
+	 * @return The size of the list.
+	 */
 	public int size()
 	{
 		return Size;
 	}
-	
+	/**
+	 * Finds a user inside the list.
+	 * 
+	 * @param username The username of the user to be found.
+	 * @return The user, or null if no user is found.
+	 * @throws IOException
+	 */
 	public User findUser(String username) throws IOException {
 		for (User u : list) {
 			if (u.Username.equals(username) && u.OutStream != null) {
@@ -54,25 +66,41 @@ public class UserList implements Serializable,Iterable<User>
 
 		return null;
 	}
-
+	/**
+	 * Adds a user to the list.
+	 * 
+	 * @param user
+	 */
 	public void add(User user) {
 		list.add(user);
 	}
-	
+	/**
+	 * Removes a user from the list.
+	 * @param user
+	 */
 	public void remove(User user)
 	{
 		list.remove(user);
 	}
-	
+
 	@Override
+	/**
+	 * Returns the iterator of the list.	
+	 */
 	public Iterator<User> iterator() {
         return list.iterator(); 
 	}
-
-	public boolean exists(User newUser) throws IOException {
+	/**
+	 * Checks if user exists inside the list, and returns a boolean value.
+	 * 
+	 * @param user The user to check.
+	 * @return true or false.(True if found) 
+	 * @throws IOException
+	 */
+	public boolean exists(User user) throws IOException {
 		for(User u : list)
 		{
-			if(u.Username.equals(newUser.Username))
+			if(u.Username.equals(user.Username))
 			{
 				return true;
 			}
@@ -80,17 +108,25 @@ public class UserList implements Serializable,Iterable<User>
 		
 		return false;
 	}
-
-	public void updateUser(User newUser) {
+	/**
+	 * Updates a user with new connectivity info.
+	 * 
+	 * @param user The user to be updated.
+	 */
+	public void updateUser(User user) {
 		for(User u : list)
 		{
-			if(u.Username.equals(newUser.Username))
+			if(u.Username.equals(user.Username))
 			{
-				u.Update(newUser.Address,newUser.OutStream,newUser.InStream);
+				u.Update(user.Address,user.OutStream,user.InStream);
 			}			
 		}
 	}
-
+	/**
+	 * Returns the usernames of the user in the list.
+	 * 
+	 * @return ArrayList<String> filled with the usernames.
+	 */
 	public ArrayList<String> getUserList() {
 		ArrayList<String> returnList = new ArrayList<String>();
 		
@@ -108,7 +144,11 @@ public class UserList implements Serializable,Iterable<User>
 		
 		return returnList;
 	}
-
+	/**
+	 * Return users with an active OutputObjectStream
+	 * 
+	 * @return An ArrayList<User> object filled with the users.
+	 */
 	public ArrayList<User> getActiveUsers() {
 		ArrayList<User> returnList = new ArrayList<User>();
 		

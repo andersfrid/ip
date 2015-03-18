@@ -8,21 +8,30 @@ import java.util.concurrent.BrokenBarrierException;
 
 import client.ClientController;
 import client.ClientGUI;
-
+/**
+ * Handles the messages sent by clients.
+ * 
+ * @author Hiplobbe
+ */
 public class MainServer {
 	private ServerSocket connSocket;
 	private int outPort = 3520;
 	private ClientListener listener = new ClientListener();
 	private UserList userList = new UserList();
 
+	/**
+	 * Constructor for the server, opens up the serversocket and starts listening for users.
+	 * 
+	 * @throws IOException
+	 */
 	public MainServer() throws IOException {
 		connSocket = new ServerSocket(outPort);
 		listener.start();
 	}
 
 	public static void main(String[] args) throws IOException {
-//		new MainServer();
-		new ClientGUI(new ClientController("10.2.21.12", 3520));
+		new MainServer();
+//		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
 	/**
@@ -63,7 +72,7 @@ public class MainServer {
 					{
 						new UpdateClientLists().start();
 						UserMessage userMessage = (UserMessage)obj;
-						System.out.println(userMessage.getMessage());
+						System.out.println(userMessage.getUsername()+":"+userMessage.getMessage());
 						
 						if (userMessage.ToUser().size() == 0) {
 							try {
@@ -105,7 +114,13 @@ public class MainServer {
 				}
 			}
 		}
-
+		/**
+		 * Sends a message to a chosen user.
+		 * 
+		 * @param to The designated user to recive the message.
+		 * @param message The UserMessage to be recivied.
+		 * @throws IOException
+		 */
 		private void sendToSpecific(User to, UserMessage message)
 				throws IOException {
 			synchronized (to.OutStream) {
@@ -116,7 +131,11 @@ public class MainServer {
 			logger.logMessage(message.getUsername(), to.Username,
 					message.getMessage());
 		}
-
+		/**
+		 * Sends a message to all online users.
+		 * 
+		 * @param message The message to be sent.
+		 */
 		private void sendToAll(UserMessage message){
 			for (User u : userList.getActiveUsers()) {
 				synchronized (u.OutStream) {
