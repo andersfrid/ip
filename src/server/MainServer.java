@@ -18,12 +18,11 @@ public class MainServer {
 	public MainServer() throws IOException {
 		connSocket = new ServerSocket(outPort);
 		listener.start();
-		new UpdateClientLists().start();
 	}
 
 	public static void main(String[] args) throws IOException {
-		new MainServer();
-		new ClientGUI(new ClientController("127.0.0.1", 3520));
+//		new MainServer();
+		new ClientGUI(new ClientController("10.2.21.12", 3520));
 	}
 
 	/**
@@ -43,14 +42,13 @@ public class MainServer {
 
 		@Override
 		public void run() {
-			while (!isInterrupted()) {
+			while (!isInterrupted()) {								
 				if(User.InStream == null || User.OutStream == null)
-				{
-//					new UpdateClientLists().start();				
+				{				
 					this.interrupt();
 				}
 				else
-				{	
+				{						
 					Object obj = new Object();
 					try 
 					{
@@ -63,6 +61,7 @@ public class MainServer {
 					
 					if(obj instanceof UserMessage)
 					{
+						new UpdateClientLists().start();
 						UserMessage userMessage = (UserMessage)obj;
 						System.out.println(userMessage.getMessage());
 						
@@ -97,8 +96,7 @@ public class MainServer {
 									}
 								} 
 								catch (IOException e) {
-									e.printStackTrace();
-//									new UpdateClientLists().start();				
+									e.printStackTrace();		
 									this.interrupt();
 								}
 							}
@@ -175,9 +173,8 @@ public class MainServer {
 							userList.updateUser(newUser);
 						}
 						
-//						new UpdateClientLists().start();
+						new UpdateClientLists().start();
 						
-						miniClientUpdate();
 						logger.logUser(newUser.Username);
 						
 //						System.out.println("Skriver ut frÃ¥n server : " + userList.getUserList());
@@ -192,27 +189,6 @@ public class MainServer {
 					e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
-			}
-		}
-		
-		public void miniClientUpdate()
-		{
-			ArrayList<User> activeUsers = userList.getActiveUsers();
-			ArrayList<String> list = userList.getUserList();
-			
-			for(User user : activeUsers)
-			{
-				synchronized (user.OutStream) {
-					try 
-					{
-						user.OutStream.writeObject(list);
-						user.OutStream.flush();
-					} 
-					catch (IOException e) 
-					{
-						e.printStackTrace();
-					}					
 				}
 			}
 		}
@@ -241,12 +217,8 @@ public class MainServer {
 						}					
 					}
 				}
-				try {
-					this.sleep(10000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+				this.interrupt();
 			}
 		}			
 	}
