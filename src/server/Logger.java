@@ -144,7 +144,7 @@ public class Logger {
 		File file = new File("Messages/" + username + ".txt");
 
 		if (file.exists()) {
-			int count = 0;
+			ArrayList<String> list = new ArrayList<String>();
 
 			FileReader fReader = new FileReader(file);
 			BufferedReader bReader = new BufferedReader(fReader);
@@ -152,18 +152,23 @@ public class Logger {
 			while (bReader.read() != -1) {
 				String s = bReader.readLine();
 				
-				if(!messages.contains(s))
+				if(!messages.contains(s) && !s.isEmpty() && s != null)
 				{
-					messages.add(s);
-				
-					count++;
-	
-					if (count > 10) {
-						break;
-					}
+					list.add(s);
+				}
+			}
+			
+			if(list.size() > 10)
+			{
+				int ex = list.size()-10;
+				for(int i = list.size()-1;i>ex;i--)
+				{
+					messages.add(list.get(i));
 				}
 			}
 		}
+		
+		
 
 		return messages;
 	}
