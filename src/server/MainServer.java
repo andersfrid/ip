@@ -220,7 +220,7 @@ public class MainServer {
 					}
 				}
 				try {
-					this.sleep(1000);
+					this.sleep(10000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

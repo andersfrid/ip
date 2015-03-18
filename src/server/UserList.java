@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -46,7 +47,7 @@ public class UserList implements Serializable,Iterable<User>
 	
 	public User findUser(String username) throws IOException {
 		for (User u : list) {
-			if (u.Username.equals(username)) {
+			if (u.Username.equals(username) && u.OutStream != null) {
 				return u;
 			}
 		}
@@ -113,9 +114,20 @@ public class UserList implements Serializable,Iterable<User>
 		
 		for(User u : list)
 		{
-			if(u.OutStream != null)
+			try
 			{
-				returnList.add(u);
+				if(u.OutStream != null)
+				{
+					returnList.add(u);
+				}
+				else
+				{
+					u.Update(null, null, null);
+				}
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
 			}
 		}
 		
