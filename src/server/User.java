@@ -92,13 +92,16 @@ public class User implements Serializable{
 						workedList.add(reworkMessages(s));
 					}
 					
-					synchronized (OutStream) {
-						OutStream.writeObject(workedList);
-						OutStream.flush();
+					if(OutStream != null)
+					{
+						synchronized (OutStream) {
+							OutStream.writeObject(workedList);
+							OutStream.flush();
+						}
 					}
 				}
 
-				interrupt();
+				this.interrupt();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

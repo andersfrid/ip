@@ -22,8 +22,8 @@ public class MainServer {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		new MainServer();
-		new ClientGUI(new ClientController("10.2.21.12", 3520));
+		new MainServer();
+		new ClientGUI(new ClientController("127.0.0.1", 3520));
 	}
 
 	/**
