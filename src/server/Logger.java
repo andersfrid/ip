@@ -161,10 +161,14 @@ public class Logger {
 			if(list.size() > 10)
 			{
 				int ex = list.size()-10;
-				for(int i = list.size()-1;i>ex;i--)
+				for(int i = list.size()-1;i>=ex;i--)
 				{
 					messages.add(0,list.get(i));
 				}
+			}
+			else
+			{
+				messages.addAll(list);
 			}
 		}
 		
