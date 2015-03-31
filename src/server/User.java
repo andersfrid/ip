@@ -99,6 +99,14 @@ public class User implements Serializable{
 		new MessageUpdater().start();
 	}
 	/**
+	 * Disconnects the user.
+	 */
+	public void Disconnect()
+	{
+		OutStream = null;
+		InStream = null;
+	}
+	/**
 	 * Class used to update the user with previous messages.
 	 * 
 	 * @author Hiplobbe

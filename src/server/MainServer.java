@@ -64,14 +64,14 @@ public class MainServer {
 					{
 						obj = User.InStream.readObject();
 					} 
-					catch (ClassNotFoundException | IOException e1) {
-						e1.printStackTrace();
+					catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
 						this.interrupt();
 					}
 					
 					if(obj instanceof UserMessage)
 					{
-						new UpdateClientLists().start();
+//						new UpdateClientLists().start();
 						UserMessage userMessage = (UserMessage)obj;
 						System.out.println(userMessage.getUsername()+":"+userMessage.getMessage());
 						
@@ -81,6 +81,7 @@ public class MainServer {
 								logger.saveAllMessage(userMessage);
 							} catch (IOException e) {
 								e.printStackTrace();
+								this.interrupt();
 							}
 						} 
 						else if (userMessage.ToUser() != null) {
@@ -107,9 +108,23 @@ public class MainServer {
 								} 
 								catch (IOException e) {
 									e.printStackTrace();		
-									this.interrupt();
+//									this.interrupt();
 								}
 							}
+						}
+					}
+					else if(obj instanceof LogOut)
+					{
+						LogOut user = (LogOut)obj;
+						
+						try 
+						{
+							userList.findUser(user.Username).Disconnect();	
+							new UpdateClientLists().start();
+						} 
+						catch (IOException e) 
+						{
+							e.printStackTrace();
 						}
 					}
 				}
@@ -238,6 +253,7 @@ public class MainServer {
 						catch (IOException e) 
 						{
 							e.printStackTrace();
+							user.OutStream = null;
 						}					
 					}
 				}

@@ -7,7 +7,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
 import javax.swing.Icon;
+
+import server.LogOut;
 import server.UserMessage;
 /**
  * Klass som hanterar logik mellan klient och server.
@@ -167,6 +170,11 @@ public class ClientController {
 	//En metod för att stänga socket.
 	public void disconnect() {
 		try {
+			LogOut logout = new LogOut(username);
+			
+			oos.writeObject(logout);
+			oos.flush();
+			
 			socket.close();
 		} catch (Exception e) {
 			System.err.println("går inte stänga socket");
