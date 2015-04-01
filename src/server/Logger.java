@@ -123,12 +123,12 @@ public class Logger {
 	 */
 	public void saveToMessage(String toUser, UserMessage userMessage)
 			throws IOException {
-		File yourFile = new File("Messages/" + toUser + ".txt");
-		if (!yourFile.exists()) {
-			yourFile.createNewFile();
+		File file = new File("Messages/" + toUser + ".txt");
+		if (!file.exists()) {
+			file.createNewFile();
 		}
 
-		saveToUserMessage(userMessage, yourFile);
+		saveToUserMessage(userMessage, file);
 	}
 
 	/**

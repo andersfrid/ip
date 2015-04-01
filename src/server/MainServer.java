@@ -65,7 +65,7 @@ public class MainServer {
 						obj = User.InStream.readObject();
 					} 
 					catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
+//						e.printStackTrace();
 						this.interrupt();
 					}
 					
